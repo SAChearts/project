@@ -1,8 +1,6 @@
 DROP TABLE employees IF EXISTS;
 DROP TABLE company IF EXISTS;
 
-
-
 CREATE TABLE employees (
     empID           INTEGER PRIMARY KEY,
     fname           TEXT NOT NULL,
@@ -29,11 +27,17 @@ CREATE TABLE department {
     CONSTRAINT department_manager_fk FOREIGN KEY (managerID)
         REFERENCES employees(managerID)
 
-}
+};
 
 CREATE TABLE company (
     co_name    VARCHAR(100) PRIMARY KEY,
     co_mission  TEXT,
     co_tagline: TEXT
     
-)
+);
+
+CREATE TABLE comments (
+    empID       INTEGER,
+    comments    TEXT,
+    magnitude   INTEGER,
+);
