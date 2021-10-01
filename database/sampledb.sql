@@ -48,3 +48,10 @@ CREATE TABLE punctuality (
     incedent_type   TEXT,
     magnitude       INTEGER,
 );
+
+CREATE TABLE incedents (
+    empID           INTEGER,
+    incedent_date   TEXT,
+    incedent_type   TEXT,
+    magnitude       INTEGER,
+);
