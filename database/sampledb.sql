@@ -9,9 +9,6 @@ CREATE TABLE employees (
     pass            TEXT NOT NULL,
     dob             TEXT NOT NULL,
     startdate       TEXT NOT NULL,
-    incedents       INTEGER DEFAULT 0 NOT NULL,
-    tardiness       INTEGER DEFAULT 0 NOT NULL,
-    proj_completed  INTEGER DEFAULT 0 NOT NULL,
     managerID       INTEGER,
     CONSTRAINT employees_manager_fk FOREIGN KEY (managerID)
         REFERENCES employees(managerID)
