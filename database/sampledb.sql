@@ -1,3 +1,7 @@
+DROP TABLE comments IF EXISTS;
+DROP TABLE incedents IF EXISTS;
+DROP TABLE punctuality IF EXISTS;
+DROP TABLE department IF EXISTS;
 DROP TABLE employees IF EXISTS;
 DROP TABLE company IF EXISTS;
 
