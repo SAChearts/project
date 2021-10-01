@@ -1,22 +1,39 @@
 DROP TABLE employees IF EXISTS;
 DROP TABLE company IF EXISTS;
 
+
+
 CREATE TABLE employees (
-    empID           SEQUENCE PRIMARY KEY,
-    fname           VARCHAR(25) NOT NULL,
-    lname           VARCHAR(25) NOT NULL,
-    username        VARCHAR(100) NOT NULL,
-    pass            VARCHAR(20) NOT NULL,
-    dob             DATE NOT NULL,
-    startdate       DATE  NOT NULL,
-    incedents       INT DEFAULT 0,
-    tardiness       INT DEFAULT 0,
-    proj_completed  INT DEFAULT 0,
-    managerID       INT REFERENCES employees
-        ON DELETE SET NULL
+    empID           INTEGER PRIMARY KEY,
+    fname           TEXT NOT NULL,
+    lname           TEXT NOT NULL,
+    username        TEXT NOT NULL,
+    pass            TEXT NOT NULL,
+    dob             TEXT NOT NULL,
+    startdate       TEXT NOT NULL,
+    incedents       INTEGER DEFAULT 0 NOT NULL,
+    tardiness       INTEGER DEFAULT 0 NOT NULL,
+    proj_completed  INTEGER DEFAULT 0 NOT NULL,
+    managerID       INTEGER,
+    CONSTRAINT employees_manager_fk FOREIGN KEY (managerID)
+        REFERENCES employees(managerID)
 );
 
+CREATE TABLE department {
+    deptID          INTEGER PRIMARY KEY,
+    dept_name       TEXT NOT NULL,
+    managerID       INTEGER NOT NULL,
+    proj_goal       INTEGER,
+    punc_goal       INTEGER,
+    incedent_goal   INTEGER,
+    CONSTRAINT department_manager_fk FOREIGN KEY (managerID)
+        REFERENCES employees(managerID)
+
+}
+
 CREATE TABLE company (
-    company_name    VARCHAR(100) PRIMARY KEY,
+    co_name    VARCHAR(100) PRIMARY KEY,
+    co_mission  TEXT,
+    co_tagline: TEXT
     
 )
