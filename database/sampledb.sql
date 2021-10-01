@@ -41,3 +41,10 @@ CREATE TABLE comments (
     comments    TEXT,
     magnitude   INTEGER,
 );
+
+CREATE TABLE punctuality (
+    empID           INTEGER,
+    incedent_date   TEXT,
+    incedent_type   TEXT,
+    magnitude       INTEGER,
+);
