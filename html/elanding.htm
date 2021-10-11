@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Employee Dashboard</title>
+	</head>
+	<body>
+		<center>
+		<div id="wrapper">
+			<center>
+				<h1>Employee Information Services</h1>
+				<h2>Welcome $[employeeName] today is <span class="date" id="date"></span></h2>
+			</center>
+			
+				<div class="tab">
+					<button class="tablinks active" onclick="openTab(event, 'Home')" id="DefaultOpen">Home</button>
+					<button class="tablinks" onclick="openTab(event, 'EI')">Employee Information</button>
+					<button class="tablinks" onclick="openTab(event, 'EP')">Employee Performance</button>
+					<button class="tablinks" onclick="openTab(event, 'TE')">Top Employees</button>
+				</div>
+				
+				<div id="Home" class="tabcontent">
+					<h3>Employee System</h3>
+					<p style="text-align:justify;">This is the Employee System for $[company.name]. You are currently logged in as $[employee.name]. Use the tabs on the left to see your profile information and performance benchmarks. If anything is incorrect please contact your manager to change the information for you.</p>
+				</div>
+
+				<div id="EI" class="tabcontent">
+					<table style="width:100%;padding-top:50px;"><tr><td style="width:170px; vertical-align:top;">
+					<div style="background-image: url(http://placehold.it/150x150);
+						{if $[employee-has-image] == true}
+							background-image: url('$[employee-image]');
+						{/if}
+						background-size: cover;width:150px;height:150px;"> </div>
+					</td><td style="vertical-align:top;">
+					<div class="info">
+						<div class="info-field">
+							<span class="info-label">Full Name: </span> 
+							$[employee.name]
+						</div>
+						<div class="info-field">
+							<span class="info-label">Email Address: </span> 
+							$[employee.email]
+						</div>
+						<div class="info-field">
+							<span class="info-label">Phone Number: </span> 
+							$[employee.number]
+						</div>
+						<div class="info-field">
+							<span class="info-label">Job Title: </span> 
+							$[employee.title]
+						</div>
+						<div class="info-field">
+							<span class="info-label">Manager: </span> 
+							$[employee.manager]
+						</div>
+						<div class="info-field">
+							<span class="info-label">Hire Date: </span> 
+							$[employee.hiredate]
+						</div>
+					</div></td>
+					</tr></table>
+				</div>
+
+				<div id="EP" class="tabcontent">
+					<h3>Employee Performance</h3>
+					<table style="width:100%;"><tr><td style="width:170px; vertical-align:top;">
+					<div style="background-image: url(http://placehold.it/150x150);
+						{if $[employee-has-image] == true}
+							background-image: url('$[employee-image]');
+						{/if}
+						background-size: cover;width:150px;height:150px;"> </div>
+					</td>
+					<td style="vertical-align:top;">
+					<div class="perf">
+						<div class="perf-field">
+							<span class="perf-label">Hours Worked (This Week): </span> 
+							$[employee.whours]
+						</div>
+						<div class="perf-field">
+							<span class="perf-label">Hours Worked (This Month): </span> 
+							$[employee.mhours]
+						</div>
+						<div class="perf-field">
+							<span class="perf-label">Overtime Worked (This Week): </span> 
+							$[employee.overtime]
+						</div>
+						<div class="perf-field">
+							<span class="perf-label">PTO Hours Used (This Year): </span> 
+							$[employee.ptoused]
+						</div>
+						<div class="perf-field">
+							<span class="perf-label">PTO Hours Available (This Year): </span> 
+							$[employee.ptoavail]
+						</div>
+						
+						<div class="perf-field">
+							<span class="perf-label">Tardies: </span> 
+							$[employee.tardies]
+						</div>
+						<div class="perf-field">
+							<span class="perf-label">No Call No Shows: </span> 
+							$[employee.ncns]
+						</div>
+						<div class="perf-field">
+							<span class="perf-label">Kudos: </span> 
+							$[employee.kudos]
+						</div>
+					</div>
+					</td>
+					</tr></table>
+				</div>
+				
+				<div id="TE" class="tabcontent">
+					<h3>Top Employees</h3>
+					<center>
+						<table style="width:100%;"><tr><td>
+						<center><b>Most Hours Worked:</b></center>
+							<div style="width:100%;text-align:justify;">
+							<ol style="margin-left:50px;">
+							<li>[$employee.hrs1.name]</li>
+							<li>[$employee.hrs2.name]</li>
+							<li>[$employee.hrs3.name]</li>
+							<li>[$employee.hrs4.name]</li>
+							<li>[$employee.hrs5.name]</li>
+							</ol>
+						</div>
+						</td><td>
+						<center><b>Most Lifetime Kudos:</b></center> 
+							<div style="width:100%;text-align:justify;">
+							<ol style="margin-left:50px;">
+							<li>[$employee.kudos1.name]</li>
+							<li>[$employee.kudos2.name]</li>
+							<li>[$employee.kudos3.name]</li>
+							<li>[$employee.kudos4.name]</li>
+							<li>[$employee.kudos5.name]</li>
+							</ol>
+						</div>
+						</td></tr>
+						</table>
+					</center>
+				</div>
+		
+		</div>
+		</center>
+	</body>
+<style>
+
+.info {
+}
+.info .info-field {
+	width:100%;
+}
+
+.info .info-field .info-label {
+	display:inline-block;
+	width:35%;
+	text-align:left;
+	padding-left:20px;
+	padding-bottom:10px;
+}
+
+.perf {
+}
+.perf .perf-field {
+	width:100%;
+}
+
+.perf .perf-field .perf-label {
+	display:inline-block;
+	width:60%;
+	text-align:left;
+	padding-left:20px;
+	padding-bottom:10px;
+}
+
+#wrapper {
+	width:65%;
+	position:relative;
+	border:1px black solid;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+.tab {
+	float: left;
+	border: 1px solid #ccc;
+	background-color: #f1f1f1;
+	width: 30%;
+	height: 300px;
+}
+
+.tab button {
+	display: block;
+	background-color: inherit;
+	color: black;
+	padding: 22px 16px;
+	width: 100%;
+	border: none;
+	outline: none;
+	text-align: left;
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+.tab button:hover {
+	background-color: #ddd;
+}
+
+.tab button.active {
+	background-color: #ccc;
+}
+
+.tabcontent {
+	float: left;
+	padding: 0px 12px;
+	border: 1px solid #ccc;
+	width: 70%;
+	border-left: none;
+	height: 300px;
+}
+
+
+</style>
+<script>
+	function openTab(evt, tabName) {
+		var i, tabcontent, tablinks;
+		tabcontent = document.getElementsByClassName("tabcontent");
+		for (i = 0; i < tabcontent.length; i++) {
+			tabcontent[i].style.display = "none";
+		}
+		tablinks = document.getElementsByClassName("tablinks");
+		for (i = 0; i < tabcontent.length; i++) {
+			tablinks[i].classList.remove("active");
+	}
+	document.getElementById(tabName).style.display = "block";
+	evt.currentTarget.classList.add("active");
+	}
+	document.getElementById("DefaultOpen").click();
+  
+	var today = new Date();
+	var dd = String(today.getDate()).padStart(2, '0');
+	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+	var yyyy = today.getFullYear();
+	today = mm + '/' + dd + '/' + yyyy;
+	document.getElementById('date').innerHTML = today;
+
+</script>
+</html>
+
+</html>
