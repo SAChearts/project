@@ -18,7 +18,7 @@ CREATE TABLE employees (
         REFERENCES employees(managerID)
 );
 
-CREATE TABLE department {
+CREATE TABLE department (
     deptID          INTEGER PRIMARY KEY,
     dept_name       TEXT NOT NULL,
     managerID       INTEGER NOT NULL,
@@ -28,12 +28,12 @@ CREATE TABLE department {
     CONSTRAINT department_manager_fk FOREIGN KEY (managerID)
         REFERENCES employees(managerID)
 
-};
+);
 
 CREATE TABLE company (
     co_name    VARCHAR(100) PRIMARY KEY,
     co_mission  TEXT,
-    co_tagline: TEXT
+    co_tagline: TEXT,
     
 );
 
