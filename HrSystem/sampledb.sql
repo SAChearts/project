@@ -1,9 +1,9 @@
-DROP TABLE comments IF EXISTS;
-DROP TABLE incedents IF EXISTS;
-DROP TABLE punctuality IF EXISTS;
-DROP TABLE department IF EXISTS;
-DROP TABLE employees IF EXISTS;
-DROP TABLE company IF EXISTS;
+DROP TABLE  IF  EXISTS comments;
+DROP TABLE IF  EXISTS incedents;
+DROP TABLE IF  EXISTS punctuality; 
+DROP TABLE IF  EXISTS department;
+DROP TABLE IF  EXISTS employees;
+DROP TABLE IF  EXISTS company;
 
 CREATE TABLE employees (
     empID           INTEGER PRIMARY KEY,
@@ -33,7 +33,7 @@ CREATE TABLE department (
 CREATE TABLE company (
     co_name    VARCHAR(100) PRIMARY KEY,
     co_mission  TEXT,
-    co_tagline: TEXT,
+    co_tagline TEXT,
     
 );
 
