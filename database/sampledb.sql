@@ -41,6 +41,12 @@ CREATE TABLE comments (
     magnitude   INTEGER
 );
 
+CREATE TABLE completed_projects (
+    empID       INTEGER,
+    proj_name   TEXT,
+    magnitude   INTEGER
+);
+
 CREATE TABLE punctuality (
     empID           INTEGER,
     incedent_date   TEXT,
