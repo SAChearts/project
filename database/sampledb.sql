@@ -15,7 +15,7 @@ CREATE TABLE employees (
     dob             TEXT NOT NULL,
     startdate       TEXT NOT NULL,
     managerID       INTEGER,
-    FOREIGN KEY (managerID) REFERENCES employees(managerID)
+    FOREIGN KEY (managerID) REFERENCES employees(empID)
 );
 
 
@@ -26,7 +26,7 @@ CREATE TABLE department (
     proj_goal       INTEGER,
     punc_goal       INTEGER,
     incedent_goal   INTEGER,
-    FOREIGN KEY (managerID) REFERENCES employees(managerID)
+    FOREIGN KEY (managerID) REFERENCES employees(empID)
 
 );
 
@@ -75,7 +75,6 @@ INSERT INTO employees (
     startdate,
     managerID )
 VALUES
-    -- pass == md5("username1234")
     ('Liam', 'Smith', 'lsmith', '2513f4b7667125c0c49775855c0e9af6', '1 March 1990', '15 February 2018', NULL),
     ('Noah', 'Johnson', 'njohnson', '0454b72ad059857b2f0863165f5d0962', '30 April 1991', '21 June 2018', 1),
     ('Oliver', 'Williams', 'owilliams', '73b50cd04d849f612b05a13299ffcefa', '19 June 1991', '14 May 2019', 1),
