@@ -53,18 +53,9 @@ CREATE TABLE punctuality (
     empID           INTEGER,
     incedent_date   TEXT,
     incedent_type   TEXT,
-<<<<<<< HEAD
-
     magnitude       INTEGER,
     CONSTRAINT punctuality_type_ck
         CHECK (incedent_type IN ('late', 'excused', 'unexcused'))
-||||||| parent of 9e595f6 (add db dummy data)
-    magnitude       INTEGER
-=======
-    magnitude       INTEGER,
-    CONSTRAINT punctuality_type_ck
-        CHECK (incedent_type IN ('late', 'excused', 'unexcused'))
->>>>>>> 9e595f6 (add db dummy data)
 );
 
 CREATE TABLE incedents (
@@ -83,12 +74,7 @@ INSERT INTO employees (
     startdate,
     managerID )
 VALUES
-<<<<<<< HEAD
-||||||| parent of 9e595f6 (add db dummy data)
-    -- PASSWORD == USERNAME1234
-=======
     -- pass == md5("username1234")
->>>>>>> 9e595f6 (add db dummy data)
     ('Liam', 'Smith', 'lsmith', '2513f4b7667125c0c49775855c0e9af6', '1 March 1990', '15 February 2018', NULL),
     ('Noah', 'Johnson', 'njohnson', '0454b72ad059857b2f0863165f5d0962', '30 April 1991', '21 June 2018', 1),
     ('Oliver', 'Williams', 'owilliams', '73b50cd04d849f612b05a13299ffcefa', '19 June 1991', '14 May 2019', 1),
@@ -111,7 +97,6 @@ VALUES
     ('Mila', 'Carter', 'mcarter', 'fd0ac2607faaaa027031439eeb76a0ea', '3 June 1994', '20 September 2021', 1)
 ;
  
-<<<<<<< HEAD
 INSERT INTO department (
     dept_name,    
     managerID,    
@@ -184,78 +169,3 @@ VALUES
     (17, '15 September 2021', 'Distributed inappropriate email', 5),
     (16, '22 September 2021', 'Personal phone call during work hours', 5)
 ;
-||||||| parent of 9e595f6 (add db dummy data)
-=======
-INSERT INTO department (
-    dept_name,    
-    managerID,    
-    proj_goal,    
-    punc_goal,    
-    incedent_goal)
-VALUES
-    ('main', 1, 500, 100, 50)
-;
-
-INSERT INTO company (co_name, co_mission, co_tagline)
-VALUES (
-    'Super Service', 
-    'Our mission is to provide the best service experience for our customers',
-    'Simple Services Made Super!')
-;
-
-INSERT INTO comments (empID, comments, magnitude)
-VALUES
-    (1, 'I am so proud of your sympathetic heart.', 5),
-    (3, 'I feel safe with you.', 5),
-    (4, 'That thing you don''t like about yourself is what makes you so interesting.', 5),
-    (5, 'I appreciate our friendship.', 5),
-    (7, 'Our community is better because you’re in it.', 5),
-    (9, 'Would you like to be my child’s godmother/godfather?', 5),
-    (10, 'I value your opinion.', 5),
-    (11, 'I appreciate you.', 5),
-    (15, 'I am so proud that you always stand your ground.', 5),
-    (17, 'Our family is complete because of you.', 5)
-;
-
-INSERT INTO completed_projects (empID, proj_name, magnitude)
-VALUES
-    (2, 'Fool With A Hat', 5),
-    (4, 'Kicked Me Out', 3),
-    (6, 'Raven Exploit', 8),
-    (8, 'Wife Delusion', 5),
-    (10, 'Baker And Soldier', 5),
-    (12, 'Hunter And Raven', 1),
-    (14, 'Antics Lives With Me', 2),
-    (16, 'Parody Prophecy', 7),
-    (18, 'Climax Of My Teacher', 5),
-    (20, 'Favorite Of My Trick', 3)
-;
-
-INSERT INTO punctuality (empID, incedent_date, incedent_type, magnitude)
-VALUES
-    (1, '22 December 2020', 'late', 5),
-    (2, '22 February 2021', 'excused', 5),
-    (3, '24 February 2021', 'late', 5),
-    (4, '3 March 2021', 'late', 5),
-    (5, '17 March 2021', 'unexcused', 5),
-    (20, '31 March 2021', 'unexcused', 5),
-    (19, '3 September 2021', 'late', 5),
-    (18, '7 September 2021', 'late', 5),
-    (17, '15 September 2021', 'excused', 5),
-    (16, '22 September 2021', 'excused', 5)
-;
-
-INSERT INTO incedents (empID, incedent_date, incedent_desc, magnitude)
-VALUES
-    (1, '22 December 2020', 'Reported wrong hours worked', 5),
-    (2, '22 February 2021', 'Stormed out of meeting', 5),
-    (3, '24 February 2021', 'Failed to report malfunction', 5),
-    (4, '3 March 2021', 'Instigated an argument', 5),
-    (5, '17 March 2021', 'Broke office door', 5),
-    (20, '31 March 2021', 'Failed to file paperwork', 5),
-    (19, '3 September 2021', 'Left out confidential documents', 5),
-    (18, '7 September 2021', 'Failed to lock storage room', 5),
-    (17, '15 September 2021', 'Distributed inappropriate email', 5),
-    (16, '22 September 2021', 'Personal phone call during work hours', 5)
-;
->>>>>>> 9e595f6 (add db dummy data)
