@@ -15,8 +15,9 @@ CREATE TABLE employees (
     dob             TEXT NOT NULL,
     startdate       TEXT NOT NULL,
     managerID       INTEGER,
-    FOREIGN KEY (managerID) REFERENCES employees(managerID)
+    FOREIGN KEY (managerID) REFERENCES employees(empID)
 );
+
 
 CREATE TABLE department (
     deptID          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,7 +26,7 @@ CREATE TABLE department (
     proj_goal       INTEGER,
     punc_goal       INTEGER,
     incedent_goal   INTEGER,
-    FOREIGN KEY (managerID) REFERENCES employees(managerID)
+    FOREIGN KEY (managerID) REFERENCES employees(empID)
 
 );
 
