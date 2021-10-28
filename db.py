@@ -1,43 +1,75 @@
 import sqlite3
-
-import click
-from flask import current_app, g
-from flask.cli import with_appcontext
+import hashlib
 
 
-def get_db():
-    if 'db' not in g:
-        g.db = sqlite3.connect(
-            current_app.config['DATABASE'],
-            detect_types=sqlite3.PARSE_DECLTYPES
-        )
-        g.db.row_factory = sqlite3.Row
-
-    return g.db
+def db_connect():
+    return sqlite3.connect('database/sample.db')
 
 
-def close_db(e=None):
-    db = g.pop('db', None)
+def login(usrname, pword):
+    conn = db_connect()
+    cur = conn.cursor()
 
-    if db is not None:
-        db.close()
+    # Setup query statement
+    statement = "SELECT * FROM employees WHERE username=? AND pass=?"
+    usrname = usrname.strip().lower()
+    pword = pword.rstrip().encode()
+    pword = hashlib.md5(pword).hexdigest()  # hashed pword
+    vals = (usrname, pword)
+
+    # execute query
+    cur.execute(statement, vals)
+    usr = cur.fetchone()
+    conn.close()
+
+    # TODO Return user data.
+    if usr:
+        return True
+    return False
 
 
-def init_db():
-    db = get_db()
+def load_emp_data(emp_id, statement, single_row=False):
+    conn = db_connect()
+    cur = conn.cursor()
 
-    with current_app.open_resource('sampledb.sql') as f:
-        db.executescript(f.read().decode('utf8'))
+    # execute query
+    cur.execute(statement, (emp_id,))
+
+    if single_row:
+        data = cur.fetchone()
+    else:
+        data = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return data
 
 
-@click.command('init-db')
-@with_appcontext
-def init_db_command():
-    """Clear the existing data and create new tables."""
-    init_db()
-    click.echo('Initialized the database.')
+def load_employee(emp_id: int) -> tuple | None:
+    statement = "SELECT fname, lname FROM employees WHERE empID=?"
+    return load_emp_data(emp_id, statement, True)
 
 
-def init_app(app):
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
+def load_comments(emp_id) -> list:
+    statement = "SELECT comments, magnitude FROM comments WHERE empID=?"
+    return load_emp_data(emp_id, statement)
+
+
+def load_incedents(emp_id) -> list:
+    statement = "SELECT incedent_date, incedent_desc, magnitude FROM incedents WHERE empID=?"
+    return load_emp_data(emp_id, statement)
+
+
+def load_punctuality(emp_id) -> list:
+    statement = "SELECT incedent_date, incedent_type, magnitude FROM punctuality WHERE empID=?"
+    return load_emp_data(emp_id, statement)
+
+
+def load_projects(emp_id) -> list:
+    statement = "SELECT project_name, magnitude FROM completed_projects WHERE empID=?"
+    return load_emp_data(emp_id, statement)
+
+
+# if __name__ == "__main__":
+#     login("lsmith", "lsmith1234")
