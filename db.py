@@ -1,10 +1,37 @@
 import sqlite3
 import hashlib
-
+import click 
+from flask import current_app, g 
+from flask.cli import with_appcontext
 
 def db_connect():
-    return sqlite3.connect('database/sample.db')
+    if 'db' not in g:
+        g.db = sqlite3.connect(current_app.config['DATABASE'],
+        detect_types=sqlite3.PARSE_DECLTYPES)
+        g.db.row_factory = sqlite3.Row
+        return g.db
+    #return sqlite3.connect('database/sample.db') #single connection to the database 
+def db_close(e=None):
+    db = g.pop('db',None)
+    if db is not None:
+        db.close()
+def init_db():
+    db = db_connect()
+    with current_app.open_resource('databse\sampledb.sql') as f:
+        db.executescript(f.read().decode('utf8'))
+@click.command('init-db')
+@with_appcontext
+def init_db_command():
+    """Clear the existing data and create new tables."""
+    init_db()
+    click.echo('Initialized the database.')
 
+def init_app(app):
+    app.teardown_appcontext(db_close)
+    app.cli.add_command(init_db_command)
+'''
+def db_connect():
+      return sqlite3.connect('database/sample.db')
 
 def login(usrname, pword):
     conn = db_connect()
@@ -26,8 +53,6 @@ def login(usrname, pword):
     if usr:
         return True
     return False
-
-
 def load_emp_data(emp_id, statement, single_row=False):
     conn = db_connect()
     cur = conn.cursor()
@@ -46,7 +71,7 @@ def load_emp_data(emp_id, statement, single_row=False):
     return data
 
 
-def load_employee(emp_id: int) -> tuple | None:
+def load_employee(emp_id: int) -> tuple:
     statement = "SELECT fname, lname FROM employees WHERE empID=?"
     return load_emp_data(emp_id, statement, True)
 
@@ -74,7 +99,6 @@ def load_punctuality(emp_id) -> list:
 def load_projects(emp_id) -> list:
     statement = "SELECT project_name, magnitude FROM completed_projects WHERE empID=?"
     return load_emp_data(emp_id, statement)
-
-
+'''
 # if __name__ == "__main__":
 #     login("lsmith", "lsmith1234")
