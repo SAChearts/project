@@ -51,6 +51,11 @@ def load_employee(emp_id: int) -> tuple | None:
     return load_emp_data(emp_id, statement, True)
 
 
+def load_employees(manager_id: int) -> list:
+    statement = "SELECT empID, fname, lname FROM employees WHERE managerID = ?"
+    return load_emp_data(manager_id, statement)
+
+
 def load_comments(emp_id) -> list:
     statement = "SELECT comments, magnitude FROM comments WHERE empID=?"
     return load_emp_data(emp_id, statement)

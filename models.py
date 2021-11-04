@@ -21,7 +21,15 @@ class Employee:
         return load_projects(self.emp_id)
 
 
+class Manager(Employee):
+    def get_employees(self):
+        return load_employees(self.emp_id)
+
+
 # if __name__ == "__main__":
+#     m = Manager(1)
+#     print(m.get_employees())
+
 #     e = Employee(3)
 #     print(e.fname)
 #     print(e.comments())
