@@ -1,4 +1,5 @@
 import functools
+
 #import hashlib # i was going to use from werkzeug.security
                # import check_password_hash, generate_password_hash but we dont have a register
                # implementation and idk if generat_password_hash and hashlib are the same thing
@@ -8,7 +9,7 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from db import db_connect #change to project.db if its not working on your end 
+from .db import db_connect #change to project.db if its not working on your end 
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -25,13 +26,13 @@ def login():
 
         if user is None:
             error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):
+        elif not check_password_hash(user['pass'], password):
             error = 'Incorrect password.'
 
         if error is None:
             session.clear()
-            session['user_id'] = user['id']
-            return redirect(url_for('index'))
+            session['user_id'] = user['empID']
+            return redirect(url_for('Einterface.eview'))
 
         flash(error)
 
@@ -45,18 +46,18 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = db_connect().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
+            'SELECT * FROM employees WHERE empID = ?', (user_id,)
         ).fetchone()
 @bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('index'))
+    return redirect(url_for('auth.login'))
 
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            return redirect(url_for('auth.login'))
+            return redirect(url_for('Einterface.home'))
 
         return view(**kwargs)
 

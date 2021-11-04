@@ -75,7 +75,7 @@ INSERT INTO employees (
     managerID )
 VALUES
     -- pass == md5("username1234")
-    ('Liam', 'Smith', 'lsmith', '2513f4b7667125c0c49775855c0e9af6', '1 March 1990', '15 February 2018', NULL),
+    ('Liam', 'Smith', 'lsmith', 'pbkdf2:sha256:150000$8UFwGxuk$49632a7436ce90ce188df96b2a686b2478be389139c56e1489edd19132cf0d71', '1 March 1990', '15 February 2018', NULL),
     ('Noah', 'Johnson', 'njohnson', '0454b72ad059857b2f0863165f5d0962', '30 April 1991', '21 June 2018', 1),
     ('Oliver', 'Williams', 'owilliams', '73b50cd04d849f612b05a13299ffcefa', '19 June 1991', '14 May 2019', 1),
     ('Elijah', 'Jones', 'ejones', 'cddc28bef9bee2cba33748d4baa60ef8', '30 June 1991', '20 May 2019', 1),
