@@ -2,7 +2,7 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 
-from db import *
+from .db import db_close, db_connect
 
 
 #from werkzeug.exceptions import abort
@@ -24,8 +24,8 @@ def eview():
     if not session.get('user_id'):
         return redirect(url_for('auth.login'))
 
-    db = db_connect()
-    total = db.execute(
+    conn = db_connect()
+    total = conn.execute(
         """SELECT 
             SUM(cp.magnitude) as project_sum, 
             SUM(cm.magnitude) as comment_sum, 
@@ -39,23 +39,25 @@ def eview():
         WHERE e.empID = ?""",
         (session['user_id'],)
     ).fetchone()
+    g.total = total
 
     top = {}
-    top['projects'] = db.execute(
+    top['projects'] = conn.execute(
         """SELECT c.empID, SUM(magnitude) as mag_sum, fname, lname
         FROM completed_projects c
         JOIN employees e ON e.empID = c.empID
         GROUP BY c.empID
-        ORDER BY msum DESC""",
+        ORDER BY mag_sum DESC""",
     ).fetchmany(5)
 
-    top['comments'] = db.execute(
+    top['comments'] = conn.execute(
         """SELECT c.empID, SUM(magnitude) as mag_sum, fname, lname
         FROM comments c
         JOIN employees e ON e.empID = c.empID
         GROUP BY c.empID
-        ORDER BY msum DESC""",
+        ORDER BY mag_sum DESC""",
     ).fetchmany(5)
+    g.top = top
 
     db_close()
-    return render_template('Einterface/elanding.html', total, top)
+    return render_template('Einterface/elanding.html')

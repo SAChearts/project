@@ -7,7 +7,10 @@ import functools
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
-from werkzeug.security import check_password_hash, generate_password_hash
+
+from hashlib import md5
+
+# from werkzeug.security import check_password_hash, generate_password_hash
 
 # change to project.db if its not working on your end
 from .db import db_close, db_connect
@@ -22,13 +25,15 @@ def login():
 
     if request.method == 'POST':
         username = request.form['username']
-        password = request.form['password']
+        password = request.form['password'].strip()
         db = db_connect()
         user = db.execute(
             """SELECT 
                 e.empID, 
+                e.pass,
                 e.fname, 
                 e.lname, 
+                e.phone,
                 e.email, 
                 e.title, 
                 e.startdate, 
@@ -39,11 +44,11 @@ def login():
             (username,)
         ).fetchone()
         db_close()
-
         error = None
         if user is None:
             error = 'Incorrect username.'
-        elif not check_password_hash(user['pass'], password):
+        elif user['pass'] != md5(password.encode()).hexdigest():
+            # elif not check_password_hash(user['pass'], password):
             error = 'Incorrect password.'
 
         if error is None:
@@ -51,6 +56,7 @@ def login():
             session['user_id'] = user['empID']
             session['first_name'] = user['fname']
             session['last_name'] = user['lname']
+            session['phone'] = user['phone']
             session['email'] = user['email']
             session['title'] = user['title']
             session['manager'] = user['manager']

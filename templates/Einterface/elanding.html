@@ -8,7 +8,7 @@
 		<div id="wrapper">
 			<center>
 				<h1>Employee Information Services</h1>
-				<h2>Welcome {{ session['fname'] }} today is <span class="date" id="date"></span></h2>
+				<h2>Welcome {{ session.first_name }} today is <span class="date" id="date"></span></h2>
 			</center>
 			
 				<div class="tab">
@@ -20,7 +20,7 @@
 				
 				<div id="Home" class="tabcontent">
 					<h3>Employee System</h3>
-					<p style="text-align:justify;">This is the Employee System for $[company.name]. You are currently logged in as $[employee.name]. Use the tabs on the left to see your profile information and performance benchmarks. If anything is incorrect please contact your manager to change the information for you.</p>
+					<p style="text-align:justify;">This is the Employee System for $[company.name]. You are currently logged in as {{ session.first_name }} {{ session.last_name }}. Use the tabs on the left to see your profile information and performance benchmarks. If anything is incorrect please contact your manager to change the information for you.</p>
 				</div>
 
 				<div id="EI" class="tabcontent">
@@ -31,7 +31,7 @@
 					<div class="info">
 						<div class="info-field">
 							<span class="info-label">Full Name: </span> 
-							{{ session.fname }} {{ session.lname }}
+							{{ session.first_name }} {{ session.last_name }}
 						</div>
 						<div class="info-field">
 							<span class="info-label">Email Address: </span> 
@@ -71,7 +71,7 @@
 					<div class="perf">
 						<div class="perf-field">
 							<span class="perf-label">Projects Completed: </span> 
-							{{ total['projects'] }}
+							{{ g.total['project_sum'] }}
 						</div>
 						<!-- Fields for future development
 						<div class="perf-field">
@@ -83,9 +83,9 @@
 							$[employee.overtime]
 						</div> 
 						-->
-						div class="perf-field">
+						<div class="perf-field">
 							<span class="perf-label">Incedents Score: </span> 
-							{{ total['incedents'] }}
+							{{ g.total['incedent_sum'] }}
 						</div>
 						<!-- 
 						<div class="perf-field">
@@ -97,9 +97,9 @@
 							$[employee.ptoavail]
 						</div> 
 						-->
-						div class="perf-field">
+						<div class="perf-field">
 							<span class="perf-label">Punctuality Score: </span> 
-							{{ total['punctuality'] }}
+							{{ g.total['punctuality_sum'] }}
 						</div>
 						<!-- 
 						<div class="perf-field">
@@ -111,9 +111,9 @@
 							$[employee.ncns]
 						</div> 
 						-->
-				 		div class="perf-field">
+				 		<div class="perf-field">
 							<span class="perf-label">Comments Score: </span> 
-							{{ total['comments'] }}
+							{{ g.total['comment_sum'] }}
 						</div>
 						<!-- <div class="perf-field">
 							<span class="perf-label">Kudos: </span> 
@@ -132,8 +132,8 @@
 							<div style="width:100%;text-align:justify;">
 							<ol style="margin-left:50px;">
 
-							{% for name in top['projects'] %}
-								<li>{{ name }}</li>
+							{% for employee in g.top['projects'] %}
+								<li>{{ employee['fname'] }} {{ employee['lname'] }}</li>
 							{% endfor %}
 
 							</ol>
@@ -142,8 +142,8 @@
 						<center><b>Most Lifetime Kudos:</b></center> 
 							<div style="width:100%;text-align:justify;">
 							<ol style="margin-left:50px;">
-							{% for name in top['comments'] %}
-								<li>{{ name }}</li>
+							{% for employee in g.top['comments'] %}
+								<li>{{ employee['fname'] }} {{ employee['lname'] }}</li>
 							{% endfor %}
 							</ol>
 						</div>
