@@ -8,7 +8,7 @@
 		<div id="wrapper">
 			<center>
 				<h1>Employee Information Services</h1>
-				<h2>Welcome $[employeeName] today is <span class="date" id="date"></span></h2>
+				<h2>Welcome {{ session['fname'] }} today is <span class="date" id="date"></span></h2>
 			</center>
 			
 				<div class="tab">
@@ -26,39 +26,36 @@
 				<div id="EI" class="tabcontent">
 					<table style="width:100%;padding-top:50px;"><tr><td style="width:170px; vertical-align:top;">
 					<div style="background-image: url(http://placehold.it/150x150);
-						{if $[employee-has-image] == true}
-							background-image: url('$[employee-image]');
-						{/if}
 						background-size: cover;width:150px;height:150px;"> </div>
 					</td><td style="vertical-align:top;">
 					<div class="info">
 						<div class="info-field">
 							<span class="info-label">Full Name: </span> 
-							$[employee.name]
+							{{ session.fname }} {{ session.lname }}
 						</div>
 						<div class="info-field">
 							<span class="info-label">Email Address: </span> 
-							$[employee.email]
+							{{ session.email }}
 						</div>
 						<div class="info-field">
 							<span class="info-label">Phone Number: </span> 
-							$[employee.number]
+							{{ session.phone }}
 						</div>
 						<div class="info-field">
 							<span class="info-label">Employee ID: </span> 
-							$[employee.id]
+							{{ session.user_id }}
 						</div>
 						<div class="info-field">
 							<span class="info-label">Job Title: </span> 
-							$[employee.title]
+							{{ session.title }}
 						</div>
 						<div class="info-field">
 							<span class="info-label">Manager: </span> 
-							$[employee.manager]
+							{{ session.manager }}
 						</div>
 						<div class="info-field">
 							<span class="info-label">Hire Date: </span> 
-							$[employee.hiredate]
+							{{ session.hire_date }}
 						</div>
 					</div></td>
 					</tr></table>
@@ -68,17 +65,15 @@
 					<h3>Employee Performance</h3>
 					<table style="width:100%;"><tr><td style="width:170px; vertical-align:top;">
 					<div style="background-image: url(http://placehold.it/150x150);
-						{if $[employee-has-image] == true}
-							background-image: url('$[employee-image]');
-						{/if}
 						background-size: cover;width:150px;height:150px;"> </div>
 					</td>
 					<td style="vertical-align:top;">
 					<div class="perf">
 						<div class="perf-field">
-							<span class="perf-label">Hours Worked (This Week): </span> 
-							$[employee.whours]
+							<span class="perf-label">Projects Completed: </span> 
+							{{ total['projects'] }}
 						</div>
+						<!-- Fields for future development
 						<div class="perf-field">
 							<span class="perf-label">Hours Worked (This Month): </span> 
 							$[employee.mhours]
@@ -86,7 +81,13 @@
 						<div class="perf-field">
 							<span class="perf-label">Overtime Worked (This Week): </span> 
 							$[employee.overtime]
+						</div> 
+						-->
+						div class="perf-field">
+							<span class="perf-label">Incedents Score: </span> 
+							{{ total['incedents'] }}
 						</div>
+						<!-- 
 						<div class="perf-field">
 							<span class="perf-label">PTO Hours Used (This Year): </span> 
 							$[employee.ptoused]
@@ -94,8 +95,13 @@
 						<div class="perf-field">
 							<span class="perf-label">PTO Hours Available (This Year): </span> 
 							$[employee.ptoavail]
+						</div> 
+						-->
+						div class="perf-field">
+							<span class="perf-label">Punctuality Score: </span> 
+							{{ total['punctuality'] }}
 						</div>
-						
+						<!-- 
 						<div class="perf-field">
 							<span class="perf-label">Tardies: </span> 
 							$[employee.tardies]
@@ -103,11 +109,16 @@
 						<div class="perf-field">
 							<span class="perf-label">No Call No Shows: </span> 
 							$[employee.ncns]
+						</div> 
+						-->
+				 		div class="perf-field">
+							<span class="perf-label">Comments Score: </span> 
+							{{ total['comments'] }}
 						</div>
-						<div class="perf-field">
+						<!-- <div class="perf-field">
 							<span class="perf-label">Kudos: </span> 
 							$[employee.kudos]
-						</div>
+						</div> -->
 					</div>
 					</td>
 					</tr></table>
@@ -120,22 +131,20 @@
 						<center><b>Most Hours Worked:</b></center>
 							<div style="width:100%;text-align:justify;">
 							<ol style="margin-left:50px;">
-							<li>[$employee.hrs1.name]</li>
-							<li>[$employee.hrs2.name]</li>
-							<li>[$employee.hrs3.name]</li>
-							<li>[$employee.hrs4.name]</li>
-							<li>[$employee.hrs5.name]</li>
+
+							{% for name in top['projects'] %}
+								<li>{{ name }}</li>
+							{% endfor %}
+
 							</ol>
 						</div>
 						</td><td>
 						<center><b>Most Lifetime Kudos:</b></center> 
 							<div style="width:100%;text-align:justify;">
 							<ol style="margin-left:50px;">
-							<li>[$employee.kudos1.name]</li>
-							<li>[$employee.kudos2.name]</li>
-							<li>[$employee.kudos3.name]</li>
-							<li>[$employee.kudos4.name]</li>
-							<li>[$employee.kudos5.name]</li>
+							{% for name in top['comments'] %}
+								<li>{{ name }}</li>
+							{% endfor %}
 							</ol>
 						</div>
 						</td></tr>
@@ -148,8 +157,8 @@
 	</body>
 <style>
 
-.info {
-}
+/* .info {
+} */
 .info .info-field {
 	width:100%;
 }
@@ -162,8 +171,8 @@
 	padding-bottom:10px;
 }
 
-.perf {
-}
+/* .perf {
+} */
 .perf .perf-field {
 	width:100%;
 }
