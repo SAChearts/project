@@ -37,9 +37,11 @@ def login():
                 e.email, 
                 e.title, 
                 e.startdate, 
-                m.fname||' '||m.lname as manager
+                m.fname||' '||m.lname as manager,
+                co_name
             FROM employees e 
             JOIN employees m ON m.empID = e.managerID
+            JOIN company
             WHERE e.username = ?""",
             (username,)
         ).fetchone()
@@ -61,6 +63,7 @@ def login():
             session['title'] = user['title']
             session['manager'] = user['manager']
             session['hire_date'] = user['startdate']
+            session['company_name'] = user['co_name']
 
             return redirect(url_for('Einterface.eview'))
 
