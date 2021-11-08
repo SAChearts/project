@@ -37,7 +37,7 @@ def login():
                 e.email, 
                 e.title, 
                 e.startdate, 
-                m.lname||' '||m.fname as manager
+                m.fname||' '||m.lname as manager
             FROM employees e 
             JOIN employees m ON m.empID = e.managerID
             WHERE e.username = ?""",
