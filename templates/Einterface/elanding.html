@@ -4,6 +4,11 @@
 		<title>Employee Dashboard</title>
 	</head>
 	<body>
+		<div class="button-box">
+			<div class="button-box-in">
+				<button id="logout"><a href="{{ url_for('auth.logout') }}">Logout</a></button>
+			</div>
+		</div>
 		<center>
 		<div id="wrapper">
 			<center>
@@ -169,6 +174,43 @@
 	text-align:left;
 	padding-left:20px;
 	padding-bottom:10px;
+}
+
+.button-box {
+	text-align:center;
+}
+.button-box-in {
+	margin-left:80%;
+	width:20%;
+}
+button {
+	width:45%;
+	padding:10px;
+	font-weight:900;
+	border-radius:20px;
+}
+button#login {
+	background-color:#fff;
+	color:#000;
+	border:transparent;
+	transition:background 2s;
+}
+
+button#login:hover {
+	background-color:hsl(var(--signupback), 85%);
+}
+button {
+	width:45%;
+	padding:10px;
+	font-weight:900;
+	border-radius:20px;
+}
+
+button#logout {
+	background-color:#fff;
+	color:#000;
+	border:transparent;
+	transition:background 2s;
 }
 
 /* .perf {
