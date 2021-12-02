@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Admin Dashboard</title>
+	</head>
+	<body>
+		<div class="button-box">
+			<div class="button-box-in">
+				<button id="logout"><a href="{{ url_for('auth.logout') }}">Logout</a></button>
+			</div>
+		</div>
+		<center>
+		<div id="wrapper">
+			<center>
+				<h1>Admin Information Services</h1>
+				<h2>Welcome {{ session.first_name }} today is <span class="date" id="date"></span></h2>
+			</center>
+			
+				<div class="tab">
+					<button class="tablinks active" onclick="openTab(event, 'Home')" id="DefaultOpen">Home</button>
+					<button class="tablinks" onclick="openTab(event, 'EI')">Employee Information</button>
+					<button class="tablinks" onclick="openTab(event, 'EP')">Employee Performance</button>
+					<button class="tablinks" onclick="openTab(event, 'TE')">Top Employees</button>
+					<button class="tablinks" onclick="openTab(event, 'AE')">Add Employee</button>
+				</div>
+				
+				<div id="Home" class="tabcontent">
+					<h3>Employee System</h3>
+					<p style="text-align:justify;">This is the Employee System for {{ session.company_name }}. You are currently logged in as {{ session.first_name }} {{ session.last_name }}. Use the tabs on the left to see your profile information and performance benchmarks. If anything is incorrect please contact your manager to change the information for you.</p>
+				</div>
+
+				<div id="EI" class="tabcontent">
+					<table style="width:100%;padding-top:50px;"><tr><td style="width:170px; vertical-align:top;">
+					<div style="background-image: url(http://placehold.it/150x150);
+						background-size: cover;width:150px;height:150px;"> </div>
+					</td><td style="vertical-align:top;">
+					<div class="info">
+						<div class="info-field">
+							<span class="info-label">Full Name: </span> 
+							{{ session.first_name }} {{ session.last_name }}
+						</div>
+						<div class="info-field">
+							<span class="info-label">Email Address: </span> 
+							{{ session.email }}
+						</div>
+						<div class="info-field">
+							<span class="info-label">Phone Number: </span> 
+							{{ session.phone }}
+						</div>
+						<div class="info-field">
+							<span class="info-label">Employee ID: </span> 
+							{{ session.user_id }}
+						</div>
+						<div class="info-field">
+							<span class="info-label">Job Title: </span> 
+							{{ session.title }}
+						</div>
+						<div class="info-field">
+							<span class="info-label">Manager: </span> 
+							{{ session.manager }}
+						</div>
+						<div class="info-field">
+							<span class="info-label">Hire Date: </span> 
+							{{ session.hire_date }}
+						</div>
+					</div></td>
+					</tr></table>
+				</div>
+
+				<div id="EP" class="tabcontent">
+					<h3>Employee Performance</h3>
+					<table style="width:100%;"><tr><td style="width:170px; vertical-align:top;">
+					<div style="background-image: url(http://placehold.it/150x150);
+						background-size: cover;width:150px;height:150px;"> </div>
+					</td>
+					<td style="vertical-align:top;">
+					<div class="perf">
+						<div class="perf-field">
+							<span class="perf-label">Projects Completed: </span> 
+							{{ g.total['project_sum'] }}
+						</div>
+						<!-- Fields for future development
+						<div class="perf-field">
+							<span class="perf-label">Hours Worked (This Month): </span> 
+							$[employee.mhours]
+						</div>
+						<div class="perf-field">
+							<span class="perf-label">Overtime Worked (This Week): </span> 
+							$[employee.overtime]
+						</div> 
+						-->
+						<div class="perf-field">
+							<span class="perf-label">Incedents Score: </span> 
+							{{ g.total['incedent_sum'] }}
+						</div>
+						<!-- 
+						<div class="perf-field">
+							<span class="perf-label">PTO Hours Used (This Year): </span> 
+							$[employee.ptoused]
+						</div>
+						<div class="perf-field">
+							<span class="perf-label">PTO Hours Available (This Year): </span> 
+							$[employee.ptoavail]
+						</div> 
+						-->
+						<div class="perf-field">
+							<span class="perf-label">Punctuality Score: </span> 
+							{{ g.total['punctuality_sum'] }}
+						</div>
+						<!-- 
+						<div class="perf-field">
+							<span class="perf-label">Tardies: </span> 
+							$[employee.tardies]
+						</div>
+						<div class="perf-field">
+							<span class="perf-label">No Call No Shows: </span> 
+							$[employee.ncns]
+						</div> 
+						-->
+				 		<div class="perf-field">
+							<span class="perf-label">Comments Score: </span> 
+							{{ g.total['comment_sum'] }}
+						</div>
+						<!-- <div class="perf-field">
+							<span class="perf-label">Kudos: </span> 
+							$[employee.kudos]
+						</div> -->
+					</div>
+					</td>
+					</tr></table>
+				</div>
+				
+				<div id="TE" class="tabcontent">
+					<h3>Top Employees</h3>
+					<center>
+						<table style="width:100%;"><tr><td>
+						<center><b>Most Hours Worked:</b></center>
+							<div style="width:100%;text-align:justify;">
+							<ol style="margin-left:50px;">
+
+							{% for employee in g.top['projects'] %}
+								<li>{{ employee['fname'] }} {{ employee['lname'] }}</li>
+							{% endfor %}
+
+							</ol>
+						</div>
+						</td><td>
+						<center><b>Most Lifetime Kudos:</b></center> 
+							<div style="width:100%;text-align:justify;">
+							<ol style="margin-left:50px;">
+							{% for employee in g.top['comments'] %}
+								<li>{{ employee['fname'] }} {{ employee['lname'] }}</li>
+							{% endfor %}
+							</ol>
+						</div>
+						</td></tr>
+						</table>
+					</center>
+				</div>
+				<div id="AE" class="tabcontent">
+					<h3>Employee Creation</h3>
+					<div id="add_employee">
+						<form>
+							<table>
+								<tr>
+									<td class="labels">
+										<label for="first_name">
+											First Name: 
+										</label>
+									</td>
+									<td>
+										<input type="text" id="first_name">
+									</td>
+								</tr>
+								<tr>
+									<td class="labels">
+										<label for="last_name">
+											Last Name: 
+										</label>
+									</td>
+									<td>
+										<input type="text" id="last_name">
+									</td>
+								</tr>
+							<tr>
+									<td class="labels">
+										<label for="email">
+											Email: 
+										</label>
+									</td>
+									<td>
+										<input type="text" id="email">
+									</td>
+								</tr>
+							<tr>
+								<td class="labels">
+									<label for="phone">
+										Phone Number: 
+									</label>
+								</td>
+								<td>
+									<input type="text" id="phone">
+								</td>
+							</tr>
+							<tr>
+								<td class="labels">
+									<label for="user_id">
+										Employee ID: 
+									</label>
+								</td>
+								<td>
+									<input type="text" id="user_id">
+								</td>
+							</tr>
+							<tr>
+								<td class="labels">
+									<label for="title">
+										Job Title: 
+									</label>
+								</td>
+								<td>
+									<input type="text" id="title">
+								</td>
+							</tr>
+							<tr>
+								<td class="labels">
+									<label for="manager">
+										Manager: 
+									</label>
+								</td>
+								<td>
+									<input type="text" id="manager">
+								</td>
+							</tr>
+							
+							<tr>
+								<td class="labels">
+									<label for="hire_date">
+										Hire Date: 
+									</label>
+								</td>
+								<td>
+									<input type="text" id="hire_date">
+								</td>
+							</tr>
+							<tr>
+								<td class="labels">
+									Security Level: 
+								</td>
+								<td>
+									<input type="radio" id="admin" name="level" value="admin">
+									<label for="admin">
+										Admin
+									</label>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>
+									<input type="radio" id="employee" name="level" value="employee">
+									<label for="employee">
+										Employee
+									</label>
+								</td>
+							</tr>
+						<tr><td colspan="2" class="buttons">
+							<input type="submit" value="Submit">
+							<input type="reset" value="Clear">
+						</td></tr>
+						</table>
+						</form>
+					</p>
+				</div>
+		
+		</div>
+		</center>
+	</body>
+<style>
+
+body {
+	--signupback: 0 , 0%;
+}
+
+/* .info {
+} */
+.info .info-field {
+	width:100%;
+}
+
+.info .info-field .info-label {
+	display:inline-block;
+	width:35%;
+	text-align:left;
+	padding-left:20px;
+	padding-bottom:10px;
+}
+
+.button-box {
+	text-align:center;
+}
+.button-box-in {
+	margin-left:80%;
+	width:20%;
+}
+button {
+	width:45%;
+	padding:10px;
+	font-weight:900;
+	border-radius:20px;
+}
+button#login {
+	background-color:#fff;
+	color:#000;
+	border:transparent;
+	transition:background 2s;
+}
+
+button#login:hover {
+	background-color:hsl(var(--signupback), 85%);
+}
+button {
+	width:45%;
+	padding:10px;
+	font-weight:900;
+	border-radius:20px;
+}
+
+button#logout {
+	background-color:#636363;
+	color:#fff;
+	transition: background 2s;
+}
+
+button#logout:hover {
+	background-color:hsl(var(--signupback), 24%);
+}
+
+button#logout a {
+	color:#fff;
+	text-decoration:none;
+}
+
+/* .perf {
+} */
+.perf .perf-field {
+	width:100%;
+}
+
+.perf .perf-field .perf-label {
+	display:inline-block;
+	width:60%;
+	text-align:left;
+	padding-left:20px;
+	padding-bottom:10px;
+}
+
+#wrapper {
+	width:65%;
+	position:relative;
+	border:1px black solid;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+.tab {
+	float: left;
+	border: 1px solid #ccc;
+	background-color: #f1f1f1;
+	width: 30%;
+	height: 100vh;
+}
+
+.tab button {
+	display: block;
+	background-color: inherit;
+	color: black;
+	padding: 22px 16px;
+	width: 100%;
+	border: none;
+	outline: none;
+	text-align: left;
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+.tab button:hover {
+	background-color: #ddd;
+}
+
+.tab button.active {
+	background-color: #ccc;
+}
+
+.tabcontent {
+	float: left;
+	padding: 0px 12px;
+	border: 1px solid #ccc;
+	width: 70%;
+	border-left: none;
+	height:100vh;
+	overflow:auto;
+	
+}
+
+.labels {
+	text-align:right;
+	padding-right:15px;
+}
+
+.buttons {
+	text-align:center;
+	padding-top:20px;
+}
+
+</style>
+<script>
+	function openTab(evt, tabName) {
+		var i, tabcontent, tablinks;
+		tabcontent = document.getElementsByClassName("tabcontent");
+		for (i = 0; i < tabcontent.length; i++) {
+			tabcontent[i].style.display = "none";
+		}
+		tablinks = document.getElementsByClassName("tablinks");
+		for (i = 0; i < tabcontent.length; i++) {
+			tablinks[i].classList.remove("active");
+	}
+	document.getElementById(tabName).style.display = "block";
+	evt.currentTarget.classList.add("active");
+	}
+	document.getElementById("DefaultOpen").click();
+  
+	var today = new Date();
+	var dd = String(today.getDate()).padStart(2, '0');
+	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+	var yyyy = today.getFullYear();
+	today = mm + '/' + dd + '/' + yyyy;
+	document.getElementById('date').innerHTML = today;
+
+</script>
+</html>
+
+</html>
