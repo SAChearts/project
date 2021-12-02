@@ -21,7 +21,7 @@
 					<button class="tablinks" onclick="openTab(event, 'EI')">Employee Information</button>
 					<button class="tablinks" onclick="openTab(event, 'EP')">Employee Performance</button>
 					<button class="tablinks" onclick="openTab(event, 'TE')">Top Employees</button>
-					<button class="tablinks" onclick="openTab(event, 'AE')">Add Employee</button>
+					<button class="tablinks" onclick="openTab(event, 'EC')">Employee Creation</button>
 				</div>
 				
 				<div id="Home" class="tabcontent">
@@ -157,10 +157,10 @@
 						</table>
 					</center>
 				</div>
-				<div id="AE" class="tabcontent">
+				<div id="EC" class="tabcontent">
 					<h3>Employee Creation</h3>
 					<div id="add_employee">
-						<form>
+						<form action="/add_employee.php-or-whatever" method="post">
 							<table>
 								<tr>
 									<td class="labels">
@@ -240,7 +240,7 @@
 									</label>
 								</td>
 								<td>
-									<input type="text" id="hire_date">
+									<input type="date" id="hire_date" style="width:100%;">
 								</td>
 							</tr>
 							<tr>
