@@ -18,144 +18,28 @@
 			
 				<div class="tab">
 					<button class="tablinks active" onclick="openTab(event, 'Home')" id="DefaultOpen">Home</button>
-					<button class="tablinks" onclick="openTab(event, 'EI')">Employee Information</button>
-					<button class="tablinks" onclick="openTab(event, 'EP')">Employee Performance</button>
-					<button class="tablinks" onclick="openTab(event, 'TE')">Top Employees</button>
+					<button class="tablinks" onclick="openTab(event, 'CP')">Company Progress</button>
+					<button class="tablinks" onclick="openTab(event, 'EL')">Employee List</button>
 					<button class="tablinks" onclick="openTab(event, 'EC')">Employee Creation</button>
+					<button class="tablinks" onclick="openTab(event, 'SG')">Set Goals</button>
 				</div>
 				
 				<div id="Home" class="tabcontent">
-					<h3>Employee System</h3>
+					<h3>Manager System</h3>
 					<p style="text-align:justify;">This is the Employee System for {{ session.company_name }}. You are currently logged in as {{ session.first_name }} {{ session.last_name }}. Use the tabs on the left to see your profile information and performance benchmarks. If anything is incorrect please contact your manager to change the information for you.</p>
 				</div>
 
-				<div id="EI" class="tabcontent">
+				<div id="CP" class="tabcontent">
+					<h3>Company Progress</h3>
 					<table style="width:100%;padding-top:50px;"><tr><td style="width:170px; vertical-align:top;">
-					<div style="background-image: url(http://placehold.it/150x150);
-						background-size: cover;width:150px;height:150px;"> </div>
-					</td><td style="vertical-align:top;">
-					<div class="info">
-						<div class="info-field">
-							<span class="info-label">Full Name: </span> 
-							{{ session.first_name }} {{ session.last_name }}
-						</div>
-						<div class="info-field">
-							<span class="info-label">Email Address: </span> 
-							{{ session.email }}
-						</div>
-						<div class="info-field">
-							<span class="info-label">Phone Number: </span> 
-							{{ session.phone }}
-						</div>
-						<div class="info-field">
-							<span class="info-label">Employee ID: </span> 
-							{{ session.user_id }}
-						</div>
-						<div class="info-field">
-							<span class="info-label">Job Title: </span> 
-							{{ session.title }}
-						</div>
-						<div class="info-field">
-							<span class="info-label">Manager: </span> 
-							{{ session.manager }}
-						</div>
-						<div class="info-field">
-							<span class="info-label">Hire Date: </span> 
-							{{ session.hire_date }}
-						</div>
-					</div></td>
-					</tr></table>
+					</td></tr></table>
 				</div>
 
-				<div id="EP" class="tabcontent">
-					<h3>Employee Performance</h3>
+				<div id="EL" class="tabcontent">
+					<h3>Employee List</h3>
 					<table style="width:100%;"><tr><td style="width:170px; vertical-align:top;">
-					<div style="background-image: url(http://placehold.it/150x150);
-						background-size: cover;width:150px;height:150px;"> </div>
-					</td>
-					<td style="vertical-align:top;">
-					<div class="perf">
-						<div class="perf-field">
-							<span class="perf-label">Projects Completed: </span> 
-							{{ g.total['project_sum'] }}
-						</div>
-						<!-- Fields for future development
-						<div class="perf-field">
-							<span class="perf-label">Hours Worked (This Month): </span> 
-							$[employee.mhours]
-						</div>
-						<div class="perf-field">
-							<span class="perf-label">Overtime Worked (This Week): </span> 
-							$[employee.overtime]
-						</div> 
-						-->
-						<div class="perf-field">
-							<span class="perf-label">Incedents Score: </span> 
-							{{ g.total['incedent_sum'] }}
-						</div>
-						<!-- 
-						<div class="perf-field">
-							<span class="perf-label">PTO Hours Used (This Year): </span> 
-							$[employee.ptoused]
-						</div>
-						<div class="perf-field">
-							<span class="perf-label">PTO Hours Available (This Year): </span> 
-							$[employee.ptoavail]
-						</div> 
-						-->
-						<div class="perf-field">
-							<span class="perf-label">Punctuality Score: </span> 
-							{{ g.total['punctuality_sum'] }}
-						</div>
-						<!-- 
-						<div class="perf-field">
-							<span class="perf-label">Tardies: </span> 
-							$[employee.tardies]
-						</div>
-						<div class="perf-field">
-							<span class="perf-label">No Call No Shows: </span> 
-							$[employee.ncns]
-						</div> 
-						-->
-				 		<div class="perf-field">
-							<span class="perf-label">Comments Score: </span> 
-							{{ g.total['comment_sum'] }}
-						</div>
-						<!-- <div class="perf-field">
-							<span class="perf-label">Kudos: </span> 
-							$[employee.kudos]
-						</div> -->
-					</div>
-					</td>
-					</tr></table>
-				</div>
-				
-				<div id="TE" class="tabcontent">
-					<h3>Top Employees</h3>
-					<center>
-						<table style="width:100%;"><tr><td>
-						<center><b>Most Hours Worked:</b></center>
-							<div style="width:100%;text-align:justify;">
-							<ol style="margin-left:50px;">
-
-							{% for employee in g.top['projects'] %}
-								<li>{{ employee['fname'] }} {{ employee['lname'] }}</li>
-							{% endfor %}
-
-							</ol>
-						</div>
-						</td><td>
-						<center><b>Most Lifetime Kudos:</b></center> 
-							<div style="width:100%;text-align:justify;">
-							<ol style="margin-left:50px;">
-							{% for employee in g.top['comments'] %}
-								<li>{{ employee['fname'] }} {{ employee['lname'] }}</li>
-							{% endfor %}
-							</ol>
-						</div>
-						</td></tr>
-						</table>
-					</center>
+					
+					</td></tr></table>
 				</div>
 				<div id="EC" class="tabcontent">
 					<h3>Employee Creation</h3>
@@ -248,9 +132,9 @@
 									Security Level: 
 								</td>
 								<td>
-									<input type="radio" id="admin" name="level" value="admin">
-									<label for="admin">
-										Admin
+									<input type="radio" id="manager" name="level" value="manager">
+									<label for="manager">
+										Manager
 									</label>
 								</td>
 							</tr>
@@ -271,7 +155,62 @@
 						</form>
 					</p>
 				</div>
-		
+				</div>
+				<div id="SG" class="tabcontent">
+					<h3>Set Goals</h3>
+					<div id="set-goals">
+						<form action="/setgoals.php-or-whatever" method="post">
+							<table>
+								<tr>
+									<td class="labels">
+										<label for="completed_projects">
+											Completed Projects
+										</label>
+									</td>
+									<td>
+										<input type="number" id="completed_projects" name="completed_projects" min="1" max="10">
+									</td>
+								</tr>
+								<tr>
+									<td class="labels">
+										<label for="punctuality">
+											Punctuality
+										</label>
+									</td>
+									<td>
+										<input type="number" id="punctuality" name="punctuality" min="1" max="10">
+									</td>
+								</tr>
+							<tr>
+									<td class="labels">
+										<label for="professional_feedback">
+											Professional Feedback
+										</label>
+									</td>
+									<td>
+										<input type="number" id="professional_feedback" name="professional_feedback" min="1" max="10">
+									</td>
+							</tr>
+							<tr>
+									<td class="labels">
+										<label for="behavioral_intervention">
+											Behavioral Intervention
+										</label>
+									</td>
+									<td>
+										<input type="number" id="behavioral_intervention" name="behavioral_intervention" min="1" max="10">
+									</td>
+							</tr>
+							<tr>
+								<td colspan="2" class="buttons">
+									<input type="submit" value="Submit">
+									<input type="reset" value="Clear">
+								</td>
+							</tr>
+						</table>
+					</form>
+				</p>
+			</div>
 		</div>
 		</center>
 	</body>
