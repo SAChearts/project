@@ -162,6 +162,10 @@
 	</body>
 <style>
 
+body {
+	--signupback: 0 , 0%;
+}
+
 /* .info {
 } */
 .info .info-field {
@@ -207,10 +211,18 @@ button {
 }
 
 button#logout {
-	background-color:#fff;
-	color:#000;
-	border:transparent;
-	transition:background 2s;
+	background-color:#636363;
+	color:#fff;
+	transition: background 2s;
+}
+
+button#logout:hover {
+	background-color:hsl(var(--signupback), 24%);
+}
+
+button#logout a {
+	color:#fff;
+	text-decoration:none;
 }
 
 /* .perf {

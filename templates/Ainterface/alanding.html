@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Admin Dashboard</title>
+	</head>
+	<body>
+		<div class="button-box">
+			<div class="button-box-in">
+				<button id="logout"><a href="{{ url_for('auth.logout') }}">Logout</a></button>
+			</div>
+		</div>
+		<center>
+		<div id="wrapper">
+			<center>
+				<h1>Admin Information Services</h1>
+				<h2>Welcome {{ session.first_name }} today is <span class="date" id="date"></span></h2>
+			</center>
+			
+				<div class="tab">
+					<button class="tablinks active" onclick="openTab(event, 'Home')" id="DefaultOpen">Home</button>
+					<button class="tablinks" onclick="openTab(event, 'CP')">Company Progress</button>
+					<button class="tablinks" onclick="openTab(event, 'EL')">Employee List</button>
+					<button class="tablinks" onclick="openTab(event, 'EC')">Employee Creation</button>
+					<button class="tablinks" onclick="openTab(event, 'SG')">Set Goals</button>
+				</div>
+				
+				<div id="Home" class="tabcontent">
+					<h3>Manager System</h3>
+					<p style="text-align:justify;">This is the Employee System for {{ session.company_name }}. You are currently logged in as {{ session.first_name }} {{ session.last_name }}. Use the tabs on the left to see your profile information and performance benchmarks. If anything is incorrect please contact your manager to change the information for you.</p>
+				</div>
+
+				<div id="CP" class="tabcontent">
+					<h3>Company Progress</h3>
+					<table style="width:100%;padding-top:50px;"><tr><td style="width:170px; vertical-align:top;">
+					</td></tr></table>
+				</div>
+
+				<div id="EL" class="tabcontent">
+					<h3>Employee List</h3>
+					<table style="width:100%;"><tr><td style="width:170px; vertical-align:top;">
+					
+					</td></tr></table>
+				</div>
+				<div id="EC" class="tabcontent">
+					<h3>Employee Creation</h3>
+					<div id="add_employee">
+						<form action="/add_employee.php-or-whatever" method="post">
+							<table>
+								<tr>
+									<td class="labels">
+										<label for="first_name">
+											First Name: 
+										</label>
+									</td>
+									<td>
+										<input type="text" id="first_name">
+									</td>
+								</tr>
+								<tr>
+									<td class="labels">
+										<label for="last_name">
+											Last Name: 
+										</label>
+									</td>
+									<td>
+										<input type="text" id="last_name">
+									</td>
+								</tr>
+							<tr>
+									<td class="labels">
+										<label for="email">
+											Email: 
+										</label>
+									</td>
+									<td>
+										<input type="text" id="email">
+									</td>
+								</tr>
+							<tr>
+								<td class="labels">
+									<label for="phone">
+										Phone Number: 
+									</label>
+								</td>
+								<td>
+									<input type="text" id="phone">
+								</td>
+							</tr>
+							<tr>
+								<td class="labels">
+									<label for="user_id">
+										Employee ID: 
+									</label>
+								</td>
+								<td>
+									<input type="text" id="user_id">
+								</td>
+							</tr>
+							<tr>
+								<td class="labels">
+									<label for="title">
+										Job Title: 
+									</label>
+								</td>
+								<td>
+									<input type="text" id="title">
+								</td>
+							</tr>
+							<tr>
+								<td class="labels">
+									<label for="manager">
+										Manager: 
+									</label>
+								</td>
+								<td>
+									<input type="text" id="manager">
+								</td>
+							</tr>
+							
+							<tr>
+								<td class="labels">
+									<label for="hire_date">
+										Hire Date: 
+									</label>
+								</td>
+								<td>
+									<input type="date" id="hire_date" style="width:100%;">
+								</td>
+							</tr>
+							<tr>
+								<td class="labels">
+									Security Level: 
+								</td>
+								<td>
+									<input type="radio" id="manager" name="level" value="manager">
+									<label for="manager">
+										Manager
+									</label>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>
+									<input type="radio" id="employee" name="level" value="employee">
+									<label for="employee">
+										Employee
+									</label>
+								</td>
+							</tr>
+						<tr><td colspan="2" class="buttons">
+							<input type="submit" value="Submit">
+							<input type="reset" value="Clear">
+						</td></tr>
+						</table>
+						</form>
+					</p>
+				</div>
+				</div>
+				<div id="SG" class="tabcontent">
+					<h3>Set Goals</h3>
+					<div id="set-goals">
+						<form action="/setgoals.php-or-whatever" method="post">
+							<table>
+								<tr>
+									<td class="labels">
+										<label for="completed_projects">
+											Completed Projects
+										</label>
+									</td>
+									<td>
+										<input type="number" id="completed_projects" name="completed_projects" min="1" max="10">
+									</td>
+								</tr>
+								<tr>
+									<td class="labels">
+										<label for="punctuality">
+											Punctuality
+										</label>
+									</td>
+									<td>
+										<input type="number" id="punctuality" name="punctuality" min="1" max="10">
+									</td>
+								</tr>
+							<tr>
+									<td class="labels">
+										<label for="professional_feedback">
+											Professional Feedback
+										</label>
+									</td>
+									<td>
+										<input type="number" id="professional_feedback" name="professional_feedback" min="1" max="10">
+									</td>
+							</tr>
+							<tr>
+									<td class="labels">
+										<label for="behavioral_intervention">
+											Behavioral Intervention
+										</label>
+									</td>
+									<td>
+										<input type="number" id="behavioral_intervention" name="behavioral_intervention" min="1" max="10">
+									</td>
+							</tr>
+							<tr>
+								<td colspan="2" class="buttons">
+									<input type="submit" value="Submit">
+									<input type="reset" value="Clear">
+								</td>
+							</tr>
+						</table>
+					</form>
+				</p>
+			</div>
+		</div>
+		</center>
+	</body>
+<style>
+
+body {
+	--signupback: 0 , 0%;
+}
+
+/* .info {
+} */
+.info .info-field {
+	width:100%;
+}
+
+.info .info-field .info-label {
+	display:inline-block;
+	width:35%;
+	text-align:left;
+	padding-left:20px;
+	padding-bottom:10px;
+}
+
+.button-box {
+	text-align:center;
+}
+.button-box-in {
+	margin-left:80%;
+	width:20%;
+}
+button {
+	width:45%;
+	padding:10px;
+	font-weight:900;
+	border-radius:20px;
+}
+button#login {
+	background-color:#fff;
+	color:#000;
+	border:transparent;
+	transition:background 2s;
+}
+
+button#login:hover {
+	background-color:hsl(var(--signupback), 85%);
+}
+button {
+	width:45%;
+	padding:10px;
+	font-weight:900;
+	border-radius:20px;
+}
+
+button#logout {
+	background-color:#636363;
+	color:#fff;
+	transition: background 2s;
+}
+
+button#logout:hover {
+	background-color:hsl(var(--signupback), 24%);
+}
+
+button#logout a {
+	color:#fff;
+	text-decoration:none;
+}
+
+/* .perf {
+} */
+.perf .perf-field {
+	width:100%;
+}
+
+.perf .perf-field .perf-label {
+	display:inline-block;
+	width:60%;
+	text-align:left;
+	padding-left:20px;
+	padding-bottom:10px;
+}
+
+#wrapper {
+	width:65%;
+	position:relative;
+	border:1px black solid;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+.tab {
+	float: left;
+	border: 1px solid #ccc;
+	background-color: #f1f1f1;
+	width: 30%;
+	height: 100vh;
+}
+
+.tab button {
+	display: block;
+	background-color: inherit;
+	color: black;
+	padding: 22px 16px;
+	width: 100%;
+	border: none;
+	outline: none;
+	text-align: left;
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+.tab button:hover {
+	background-color: #ddd;
+}
+
+.tab button.active {
+	background-color: #ccc;
+}
+
+.tabcontent {
+	float: left;
+	padding: 0px 12px;
+	border: 1px solid #ccc;
+	width: 70%;
+	border-left: none;
+	height:100vh;
+	overflow:auto;
+	
+}
+
+.labels {
+	text-align:right;
+	padding-right:15px;
+}
+
+.buttons {
+	text-align:center;
+	padding-top:20px;
+}
+
+</style>
+<script>
+	function openTab(evt, tabName) {
+		var i, tabcontent, tablinks;
+		tabcontent = document.getElementsByClassName("tabcontent");
+		for (i = 0; i < tabcontent.length; i++) {
+			tabcontent[i].style.display = "none";
+		}
+		tablinks = document.getElementsByClassName("tablinks");
+		for (i = 0; i < tabcontent.length; i++) {
+			tablinks[i].classList.remove("active");
+	}
+	document.getElementById(tabName).style.display = "block";
+	evt.currentTarget.classList.add("active");
+	}
+	document.getElementById("DefaultOpen").click();
+  
+	var today = new Date();
+	var dd = String(today.getDate()).padStart(2, '0');
+	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+	var yyyy = today.getFullYear();
+	today = mm + '/' + dd + '/' + yyyy;
+	document.getElementById('date').innerHTML = today;
+
+</script>
+</html>
+
+</html>
