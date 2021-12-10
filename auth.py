@@ -20,6 +20,9 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
+    if session.get('is_manager'):
+        return redirect(url_for('Einterface.aview'))
+
     if session.get('user_id'):
         return redirect(url_for('Einterface.eview'))
 
@@ -37,10 +40,9 @@ def login():
                 e.email, 
                 e.title, 
                 e.startdate, 
-                m.fname||' '||m.lname as manager,
-                co_name
+                co_name,
+				e.managerID
             FROM employees e 
-            JOIN employees m ON m.empID = e.managerID
             JOIN company
             WHERE e.username = ?""",
             (username,)
@@ -61,11 +63,24 @@ def login():
             session['phone'] = user['phone']
             session['email'] = user['email']
             session['title'] = user['title']
-            session['manager'] = user['manager']
+            session['managerID'] = user['managerID']
             session['hire_date'] = user['startdate']
             session['company_name'] = user['co_name']
+            session['manager'] = None
 
-            return redirect(url_for('Einterface.eview'))
+            if user['managerID'] != None:
+                db = db_connect()
+                session['manager'] = db.execute(
+                    """SELECT fname || ' ' || lname
+                    FROM employees 
+                    WHERE empID = ?""",
+                    (user['empID'],)
+                ).fetchone()[0]
+                db_close()
+                return redirect(url_for('Einterface.eview'))
+
+            session['is_manager'] = True
+            return redirect(url_for('Einterface.aview'))
 
         flash(error)
 

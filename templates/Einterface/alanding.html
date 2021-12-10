@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+		<title>Admin Dashboard</title>
+	</head>
+	<body>
+        <a href="{{url_for('Einterface.home')}}"> <img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo" class="logo" width="150"></a>
+		<div class="button-box">
+            <strong><a href="/admin?empID={{session.user_id}}" class="button inv-button admin-switch">Switch to Employee View</a></strong>
+			<div class="button-box-in">
+				<strong><a href="{{ url_for('auth.logout') }}" class="button">Logout</a></strong>
+			</div>
+		</div>
+		<center>
+            <h1>{{ session.company_name }}</h1>
+
+		<div id="wrapper">
+            <header class="view-header" style="width:100%">
+				<h1>Admin Information Services</h1>
+				<h2>Welcome {{ session.first_name }} today is <span class="date" id="date"></span></h2>
+            </header>
+				<div class="tab">
+					<button class="tablinks active" onclick="openTab(event, 'Home')" id="DefaultOpen">Home</button>
+					<button class="tablinks" onclick="openTab(event, 'CP')">Company Progress</button>
+					<button class="tablinks" onclick="openTab(event, 'EL')">Employee List</button>
+					<button class="tablinks" onclick="openTab(event, 'EC')">Employee Creation</button>
+					<button class="tablinks" onclick="openTab(event, 'SG')">Set Goals</button>
+				</div>
+				
+				<div id="Home" class="tabcontent">
+					<h3>Manager System</h3>
+					<p style="text-align:justify;">This is the Employee System for {{ session.company_name }}. You are currently logged in as {{ session.first_name }} {{ session.last_name }}. Use the tabs on the left to see your profile information and performance benchmarks. If anything is incorrect please contact your manager to change the information for you.</p>
+				</div>
+
+				<div id="CP" class="tabcontent">
+					<h3>Company Progress</h3>
+					<table style="width:100%;" class="list">
+                        <tr>
+                            <th align="left">Category</th>
+                            <th align="left">Goal</th>
+                            <th align="left">Actual</th>
+                        </tr>
+                        <tr>
+                            <td align="left">Completed Projects</td>
+                            <td>{{g.goals['completed_projects']}}</td>
+                            <td>{{"{:.2f}".format(g.progress['projects_mag'])}}</td>
+                        </tr>
+                        <tr>
+                            <td  align="left">Punctuality</td>
+                            <td>{{g.goals['punctuality']}}</td>
+                            <td>{{"{:.2f}".format(g.progress['punctuality_mag'])}}</td>
+                        </tr>
+                        <tr>
+                            <td  align="left">Professional Feedback</td>
+                            <td>{{g.goals['comments']}}</td>
+                            <td>{{"{:.2f}".format(g.progress['comments_mag'])}}</td>
+                        </tr>
+                        <tr>
+                            <td  align="left">Behavioral Intervention</td>
+                            <td>{{g.goals['incedents']}}</td>
+                            <td>{{"{:.2f}".format(g.progress['incedents_mag'])}}</td>
+                        </tr>
+                    </table>
+				</div>
+
+				<div id="EL" class="tabcontent">
+					<h3>Employee List</h3>
+					{% with messages = get_flashed_messages(category_filter=["del"]) %}
+					{% if messages %}
+						{% for message in messages %}
+							{{ message }} <br>
+						{% endfor %}
+					{% endif %}
+					{% endwith %}
+					<table style="width:100%;" class="list">
+                        <tr align="left">
+                            <th></th>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>ID</th>
+                        </tr>
+                        {% for employee in g.employees %}
+                        
+                        <tr>
+                            <td align="center"><a href="/delete/employee?empID={{employee['empID']}}">delete</a></td>
+                            
+                                <td><a href="/admin?empID={{employee['empID']}}">{{employee['name']}}</a></td>
+                                <td>{{employee['username']}}</td>
+                                <td>{{employee['empID']}}</td>
+                        </tr>
+
+                        {% endfor %}
+                    </table>
+				</div>
+				<div id="EC" class="tabcontent">
+					<h3>Employee Creation</h3>
+					<div id="add_employee">
+						<form action="/add_employee" method="post">
+							<table>
+								<tr>
+									<td class="labels">
+										<label for="first_name">
+											First Name: 
+										</label>
+									</td>
+									<td>
+										<input type="text" name="fname" id="first_name">
+									</td>
+								</tr>
+								<tr>
+									<td class="labels">
+										<label for="last_name">
+											Last Name: 
+										</label>
+									</td>
+									<td>
+										<input type="text" name="lname" id="last_name">
+									</td>
+								</tr>
+								<tr>
+									<td class="labels">
+										<label for="username">
+											Username: 
+										</label>
+									</td>
+									<td>
+										<input type="text" name="username" id="username">
+									</td>
+								</tr>
+							<tr>
+								<td class="labels">
+									<label for="phone">
+										Phone Number: 
+									</label>
+								</td>
+								<td>
+									<input type="text" name="phone" id="phone">
+								</td>
+							</tr>
+							<tr>
+								<td class="labels">
+									<label for="title">
+										Job Title: 
+									</label>
+								</td>
+								<td>
+									<input type="text" name="title" id="title">
+								</td>
+							</tr>
+							
+							<tr>
+								<td class="labels">
+									<label for="hire_date">
+										Hire Date: 
+									</label>
+								</td>
+								<td>
+									<input type="date" id="hire_date" name="hire_date" style="width:100%;">
+								</td>
+							</tr>
+                            <tr>
+								<td class="labels">
+									<label for="dob">
+										Date of Birth: 
+									</label>
+								</td>
+								<td>
+									<input type="date" id="dob" name="dob" style="width:100%;">
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2" align="center">
+									{% with messages = get_flashed_messages(category_filter=["add"]) %}
+									{% if messages %}
+										{% for message in messages %}
+											{{ message }}
+										{% endfor %}
+									{% endif %}
+									{% endwith %}
+									<br>
+									<input type="submit" value="Submit" class="submit" style="width: 50%;">
+								</td>
+							</tr>
+						</table>
+						</form>
+					</div>
+				</div>
+				<div id="SG" class="tabcontent">
+					<h3>Set Goals</h3>
+					<div id="set-goals">
+						<form action="/setgoals" method="post">
+							<table>
+								<tr>
+									<td class="labels">
+										<label for="completed_projects">
+											Completed Projects
+										</label>
+									</td>
+									<td>
+										<input type="number" id="completed_projects" name="completed_projects" value="{{g.goals['completed_projects']}}">
+									</td>
+								</tr>
+								<tr>
+									<td class="labels">
+										<label for="punctuality">
+											Punctuality
+										</label>
+									</td>
+									<td>
+										<input type="number" id="punctuality" name="punctuality" value="{{g.goals['punctuality']}}">
+									</td>
+								</tr>
+								<tr>
+									<td class="labels">
+										<label for="professional_feedback">
+											Professional Feedback
+										</label>
+									</td>
+									<td>
+										<input type="number" id="professional_feedback" name="comments" value="{{g.goals['comments']}}">
+									</td>
+								</tr>
+								<tr>
+									<td class="labels">
+										<label for="behavioral_intervention">
+											Behavioral Intervention
+										</label>
+									</td>
+									<td>
+										<input type="number" id="behavioral_intervention" name="incedents" value="{{g.goals['incedents']}}">
+									</td>
+								</tr>
+								<tr>
+								<td colspan="2" class="buttons" >
+									{% with messages = get_flashed_messages(category_filter=["goals"]) %}
+									{% if messages %}
+										{% for message in messages %}
+											{{ message }}
+											<br>
+										{% endfor %}
+									{% endif %}
+									{% endwith %}
+									<input type="submit" value="Submit" class="submit" style="width: 50%;">
+								</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</center>
+	</body>
+<style>
+
+body {
+	--signupback: 0 , 0%;
+}
+
+/* .info {
+} */
+.info .info-field {
+	width:100%;
+}
+
+.info .info-field .info-label {
+	display:inline-block;
+	width:35%;
+	text-align:left;
+	padding-left:20px;
+	padding-bottom:10px;
+}
+
+.button-box {
+	text-align:center;
+}
+.button-box-in {
+	margin-left:80%;
+	width:20%;
+}
+button {
+	width:45%;
+	padding:10px;
+	font-weight:900;
+	border-radius:20px;
+}
+button#login {
+	background-color:#fff;
+	color:#000;
+	border:transparent;
+	transition:background 2s;
+}
+
+button#login:hover {
+	background-color:hsl(var(--signupback), 85%);
+}
+button {
+	width:45%;
+	padding:10px;
+	font-weight:900;
+	border-radius:20px;
+}
+
+button#logout {
+	background-color:#636363;
+	color:#fff;
+	transition: background 2s;
+}
+
+button#logout:hover {
+	background-color:hsl(var(--signupback), 24%);
+}
+
+button#logout a {
+	color:#fff;
+	text-decoration:none;
+}
+
+/* .perf {
+} */
+.perf .perf-field {
+	width:100%;
+}
+
+.perf .perf-field .perf-label {
+	display:inline-block;
+	width:60%;
+	text-align:left;
+	padding-left:20px;
+	padding-bottom:10px;
+}
+
+#wrapper {
+	width:65%;
+	position:relative;
+	display: flex;
+	flex-wrap: wrap;
+
+}
+
+* {
+	box-sizing: border-box;
+}
+
+.tab {
+	float: left;
+	width: 30%;
+}
+
+.tab button {
+	display: block;
+	background-color: inherit;
+	color: black;
+	padding: 22px 16px;
+	width: 100%;
+	border: none;
+	outline: none;
+	text-align: left;
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+.tab button:hover {
+	background-color: #ddd;
+}
+
+.tab button.active {
+	background-color: #ccc;
+}
+
+
+.labels {
+	text-align:right;
+	padding-right:15px;
+}
+
+.buttons {
+	text-align:center;
+	padding-top:20px;
+}
+
+</style>
+<script>
+	function openTab(evt, tabName) {
+		var i, tabcontent, tablinks;
+		tabcontent = document.getElementsByClassName("tabcontent");
+		for (i = 0; i < tabcontent.length; i++) {
+			tabcontent[i].style.display = "none";
+		}
+		tablinks = document.getElementsByClassName("tablinks");
+		for (i = 0; i < tabcontent.length; i++) {
+			tablinks[i].classList.remove("active");
+		}
+		document.getElementById(tabName).style.display = "block";
+		evt.currentTarget.classList.add("active");
+	}
+
+	tabs = document.getElementsByClassName('tablinks')
+
+	const queryString = window.location.search;
+	const urlParams = new URLSearchParams(queryString);
+	const tab = urlParams.get('tab');
+
+	switch(tab) {
+		case 'CP':
+			tabs[1].click();
+			break;
+		case 'EL':
+			tabs[2].click();
+			break;
+		case 'EC':
+			tabs[3].click();
+			break;
+		case 'SG':
+			tabs[4].click();
+			break;
+		default:
+			document.getElementById("DefaultOpen").click();
+	}
+
+  
+	var today = new Date();
+	var dd = String(today.getDate()).padStart(2, '0');
+	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+	var yyyy = today.getFullYear();
+	today = mm + '/' + dd + '/' + yyyy;
+	document.getElementById('date').innerHTML = today;
+
+</script>
+</html>
+
+</html>

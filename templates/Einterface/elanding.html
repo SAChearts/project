@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
 		<title>Employee Dashboard</title>
 	</head>
 	<body>
+		<a href="{{url_for('Einterface.home')}}"> <img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo" class="logo" width="150"></a>
 		<div class="button-box">
 			<div class="button-box-in">
-				<button id="logout"><a href="{{ url_for('auth.logout') }}">Logout</a></button>
+				<strong><a href="{{ url_for('auth.logout') }}" class="button">Logout</a></strong>
 			</div>
 		</div>
 		<center>
-		<div id="wrapper">
-			<center>
-				<h1>Employee Information Services</h1>
-				<h2>Welcome {{ session.first_name }} today is <span class="date" id="date"></span></h2>
-			</center>
+			
+			<h1>{{ session.company_name }}</h1>
+		
+			<div id="wrapper">
+				<h2 class="welcome">Welcome {{ session.first_name }}</h2>
 			
 				<div class="tab">
 					<button class="tablinks active" onclick="openTab(event, 'Home')" id="DefaultOpen">Home</button>
@@ -29,9 +31,10 @@
 				</div>
 
 				<div id="EI" class="tabcontent">
-					<table style="width:100%;padding-top:50px;"><tr><td style="width:170px; vertical-align:top;">
-					<div style="background-image: url(http://placehold.it/150x150);
-						background-size: cover;width:150px;height:150px;"> </div>
+					<table style="width:100%;padding-top:50px;" class="list"><tr><td style="width:170px; vertical-align:top;">
+					<div style="background-size: cover;width:150px;height:150px;">
+						<img src="{{url_for('static', filename="images/profile/profile-"+session.user_id|string+".png")}}" alt="">
+					</div>
 					</td><td style="vertical-align:top;">
 					<div class="info">
 						<div class="info-field">
@@ -69,14 +72,31 @@
 				<div id="EP" class="tabcontent">
 					<h3>Employee Performance</h3>
 					<table style="width:100%;"><tr><td style="width:170px; vertical-align:top;">
-					<div style="background-image: url(http://placehold.it/150x150);
-						background-size: cover;width:150px;height:150px;"> </div>
+					<div style="background-size: cover;width:150px;height:150px;">
+						<img src="{{url_for('static', filename="images/profile/profile-"+session.user_id|string+".png")}}" alt="">
+					</div>
 					</td>
 					<td style="vertical-align:top;">
 					<div class="perf">
 						<div class="perf-field">
-							<span class="perf-label">Projects Completed: </span> 
-							{{ g.total['project_sum'] }}
+							<button class="accordion">
+								<span class="perf-label">Projects Completed: </span> 
+								{{ g.total['project_sum'] }}
+							</button>
+							<div class="accordion-panel">
+								<table width="100%" align="left" class="list">
+									<tr align="left" height="32px">
+										<th>Project Name</th>
+										<th>Weight</th>
+									</tr>
+									{% for project in g.performance['projects'] %}
+									<tr align="left" height="32px">
+										<td>{{project['proj_name']}}</td>
+										<td>{{project['magnitude']}}</td>
+									</tr>
+									{% endfor %}
+								</table>
+							</div>
 						</div>
 						<!-- Fields for future development
 						<div class="perf-field">
@@ -89,8 +109,27 @@
 						</div> 
 						-->
 						<div class="perf-field">
-							<span class="perf-label">Incedents Score: </span> 
-							{{ g.total['incedent_sum'] }}
+							<button class="accordion">
+								<span class="perf-label">Incedents Score: </span> 
+								{{ g.total['incedent_sum'] }}
+							</button>
+
+							<div class="accordion-panel">
+								<table width="100%" align="left" class="list">
+									<tr align="left" height="32px">
+										<th>Description</th>
+										<th>Date</th>
+										<th>Weight</th>
+									</tr>
+									{% for project in g.performance['incedents'] %}
+									<tr align="left" height="32px">
+										<td>{{project['incedent_desc']}}</td>
+										<td>{{project['incedent_date']}}</td>
+										<td>{{project['magnitude']}}</td>
+									</tr>
+									{% endfor %}
+								</table>
+							</div>
 						</div>
 						<!-- 
 						<div class="perf-field">
@@ -103,8 +142,27 @@
 						</div> 
 						-->
 						<div class="perf-field">
-							<span class="perf-label">Punctuality Score: </span> 
-							{{ g.total['punctuality_sum'] }}
+							<button class="accordion">
+								<span class="perf-label">Punctuality Score: </span> 
+								{{ g.total['punctuality_sum'] }}
+							</button>
+
+							<div class="accordion-panel">
+								<table width="100%" class="list">
+									<tr align="left" height="32px">
+										<th>Date</th>
+										<th>Type</th>
+										<th>Weight</th>
+									</tr>
+									{% for project in g.performance['punctuality'] %}
+									<tr align="left" height="32px">
+										<td>{{project['incedent_date']}}</td>
+										<td>{{project['incedent_type']}}</td>
+										<td>{{project['magnitude']}}</td>
+									</tr>
+									{% endfor %}
+								</table>
+							</div>
 						</div>
 						<!-- 
 						<div class="perf-field">
@@ -117,8 +175,25 @@
 						</div> 
 						-->
 				 		<div class="perf-field">
-							<span class="perf-label">Comments Score: </span> 
-							{{ g.total['comment_sum'] }}
+							<button class="accordion">
+								<span class="perf-label">Comments Score: </span> 
+								{{ g.total['comment_sum'] }}
+							</button>
+
+							<div class="accordion-panel">
+								<table width="100%" align="left" class="list">
+									<tr align="left" height="32px">
+										<th>Comment</th>
+										<th>Weight</th>
+									</tr>
+									{% for project in g.performance['comments'] %}
+									<tr align="left" height="32px">
+										<td>{{project['comments']}}</td>
+										<td>{{project['magnitude']}}</td>
+									</tr>
+									{% endfor %}
+								</table>
+							</div>
 						</div>
 						<!-- <div class="perf-field">
 							<span class="perf-label">Kudos: </span> 
@@ -133,7 +208,7 @@
 					<h3>Top Employees</h3>
 					<center>
 						<table style="width:100%;"><tr><td>
-						<center><b>Most Hours Worked:</b></center>
+						<center><b>Most Projects Completed:</b></center>
 							<div style="width:100%;text-align:justify;">
 							<ol style="margin-left:50px;">
 
@@ -144,7 +219,7 @@
 							</ol>
 						</div>
 						</td><td>
-						<center><b>Most Lifetime Kudos:</b></center> 
+						<center><b>Most Kudos:</b></center> 
 							<div style="width:100%;text-align:justify;">
 							<ol style="margin-left:50px;">
 							{% for employee in g.top['comments'] %}
@@ -242,7 +317,9 @@ button#logout a {
 #wrapper {
 	width:65%;
 	position:relative;
-	border:1px black solid;
+	display: flex;
+	flex-wrap: wrap;
+
 }
 
 * {
@@ -251,10 +328,7 @@ button#logout a {
 
 .tab {
 	float: left;
-	border: 1px solid #ccc;
-	background-color: #f1f1f1;
 	width: 30%;
-	height: 300px;
 }
 
 .tab button {
@@ -279,12 +353,9 @@ button#logout a {
 }
 
 .tabcontent {
-	float: left;
-	padding: 0px 12px;
-	border: 1px solid #ccc;
+	display: flex;
 	width: 70%;
 	border-left: none;
-	height: 300px;
 }
 
 
@@ -304,13 +375,22 @@ button#logout a {
 	evt.currentTarget.classList.add("active");
 	}
 	document.getElementById("DefaultOpen").click();
-  
-	var today = new Date();
-	var dd = String(today.getDate()).padStart(2, '0');
-	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-	var yyyy = today.getFullYear();
-	today = mm + '/' + dd + '/' + yyyy;
-	document.getElementById('date').innerHTML = today;
+
+
+	var acc = document.getElementsByClassName("accordion");
+	var i;
+
+	for (i = 0; i < acc.length; i++) {
+	acc[i].addEventListener("click", function() {
+		this.classList.toggle("active");
+		var panel = this.nextElementSibling;
+		if (panel.style.maxHeight) {
+		panel.style.maxHeight = null;
+		} else {
+		panel.style.maxHeight = panel.scrollHeight + "px";
+		}
+	});
+	}
 
 </script>
 </html>

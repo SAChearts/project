@@ -39,6 +39,31 @@ def init_app(app):
     app.cli.add_command(init_db_command)
 
 
+def employee_query(empID):
+    conn = db_connect()
+    emp = conn.execute(
+        """SELECT 
+            e.empID,
+            e.username, 
+            e.pass,
+            e.fname, 
+            e.lname, 
+            e.phone,
+            e.email, 
+            e.title, 
+            e.startdate, 
+            co_name,
+            e.managerID
+        FROM employees e 
+        JOIN company
+        WHERE e.empID = ?""",
+        (empID,)
+    ).fetchone()
+    conn.close()
+
+    return emp
+
+
 '''
 def db_connect():
       return sqlite3.connect('database/sample.db')
