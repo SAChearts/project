@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+		<title>Employee Dashboard</title>
+	</head>
+	<body>
+		<a href="{{url_for('Einterface.home')}}"> <img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo" class="logo" width="150"></a>
+		<div class="button-box">
+            {% if session.is_manager %}
+            <a href="/aview" class="button inv-button admin-switch">Switch to Admin View</a>
+            {% endif %}
+			<div class="button-box-in">
+				<strong><a href="{{ url_for('auth.logout') }}" class="button">Logout</a></strong>
+			</div>
+		</div>
+		<center>
+			
+			<h1>{{ session.company_name }}</h1>
+		
+			<div id="wrapper">
+				<h2 class="welcome">Profile: {{ g.emp['fname'] }} {{ g.emp['lname'] }}</h2>
+			
+				<div class="tab">
+					<button class="tablinks active" onclick="openTab(event, 'Home')" id="DefaultOpen">Home</button>
+					<button class="tablinks" onclick="openTab(event, 'EI')">Employee Information</button>
+					<button class="tablinks" onclick="openTab(event, 'EP')">Employee Performance</button>
+					<button class="tablinks" onclick="openTab(event, 'TE')">Top Employees</button>
+				</div>
+				
+				<div id="Home" class="tabcontent">
+					<h3>Employee System</h3>
+					<p style="text-align:justify;">This is the Employee System for {{ session.company_name }}. You are currently logged in as {{ session.first_name }} {{ session.last_name }}. Use the tabs on the left to see profile information and performance benchmarks. If anything is incorrect please contact your manager to change the information for you.</p>
+				</div>
+
+				<div id="EI" class="tabcontent">
+					<table style="width:100%;padding-top:50px;"><tr><td style="width:170px; vertical-align:top;">
+					<div style="background-size: cover;width:150px;height:150px;">
+						<img src="{{url_for('static', filename="images/profile/profile-"+g.emp['empID']|string+".png")}}" alt="">
+					</div>
+					</td><td style="vertical-align:top;">
+					<form action="/edit_employee" method="post" class="info">
+						<div class="info-field">
+							<span class="info-label">First Name: </span> 
+							<input type="text" name="fname" value="{{ g.emp['fname'] }}" required>
+						</div>
+                        <div class="info-field">
+							<span class="info-label">Last Name: </span> 
+							<input type="text" name="lname" value="{{ g.emp['lname'] }}" required>
+						</div>
+                        <div class="info-field">
+							<span class="info-label">Username: </span> 
+							<input type="text" name="username" value="{{ g.emp['username'] }}" required>
+						</div>
+						<div class="info-field">
+							<span class="info-label">Email Address: </span> 
+							<input type="email" name="email" value="{{ g.emp['email'] }}" required>
+						</div>
+						<div class="info-field">
+							<span class="info-label">Phone Number: </span> 
+							<input type="tel"  name="phone" value="{{ g.emp['phone'] }}" required>
+						</div>
+						<div class="info-field">
+                            <span class="info-label">Job Title: </span> 
+							<input type="text"  name="title" value="{{ g.emp['title'] }}" required>
+						</div>
+                        <div class="info-field">
+                            <span class="info-label">Employee ID: </span> 
+                            <input type="number"  name="empID" value="{{ g.emp['empID'] }}" hidden>
+                            {{ g.emp['empID'] }}
+                        </div>
+						<div class="info-field">
+                            <span class="info-label">Manager: </span> 
+							{{ session.first_name }} {{ session.last_name }}
+						</div>
+						<div class="info-field">
+                            <span class="info-label">Hire Date: </span> 
+							{{ g.emp['startdate'] }}
+						</div>
+                        <div class="info-field">
+                            <span class="info-label">Update Password: </span> 
+                            <input type="password"  name="pass" minlength="8">
+                        </div>
+                        <div align="center">
+                            {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                {% for message in messages %}
+                                    {{ message }}
+                                    <br>
+                                {% endfor %}
+                            {% endif %}
+                            {% endwith %}
+                        <input type="submit" class="submit" style="width: 50%;">
+                        </div>
+					</form></td>
+					</tr></table>
+				</div>
+
+				<div id="EP" class="tabcontent">
+					<h3>Employee Performance</h3>
+					<table style="width:100%;"><tr><td style="width:170px; vertical-align:top;">
+					<div style="background-size: cover;width:150px;height:150px;">
+						<img src="{{url_for('static', filename="images/profile/profile-"+g.emp['empID']|string+".png")}}" alt="">
+					</div>
+					</td>
+					<td style="vertical-align:top;">
+                        <div class="perf">
+                            <div class="perf-field">
+                                <button class="accordion">
+                                    <span class="perf-label">Projects Completed: </span> 
+                                    {{ g.total['project_sum'] }}
+                                </button>
+                                <div class="accordion-panel">
+                                    <table width="100%" align="left" class="list">
+                                        <tr align="left" height="32px">
+                                            <th>Project Name</th>
+                                            <th>Weight</th>
+                                            <th></th>
+                                        </tr>
+                                        {% for project in g.performance['projects'] %}
+                                        <tr align="left" height="32px">
+                                            <td>{{project['proj_name']}}</td>
+                                            <td>{{project['magnitude']}}</td>
+                                            <td align="center">
+                                                <form action="/del_project" method="post">
+                                                    <input type="hidden" name="empID" value="{{g.emp['empID']}}">
+                                                    <input type="hidden" name="proj_name" value="{{project['proj_name']}}">
+                                                    <input type="submit" class="del-button submit" value="DEL">
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        <tr align="left" height="32px">
+                                            <form action="/add_project" method="post">
+                                                <input type="hidden" name="empID" value="{{g.emp['empID']}}">
+                                                <td><input type="text" name="proj_name" required></td>
+                                                <td><input type="number" name="magnitude" required></td>
+                                                <td align="center"><input type="submit" class="add-button submit" value="+"></td>
+                                            </form>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Fields for future development
+                            <div class="perf-field">
+                                <span class="perf-label">Hours Worked (This Month): </span> 
+                                $[employee.mhours]
+                            </div>
+                            <div class="perf-field">
+                                <span class="perf-label">Overtime Worked (This Week): </span> 
+                                $[employee.overtime]
+                            </div> 
+                            -->
+                            <div class="perf-field">
+                                <button class="accordion">
+                                    <span class="perf-label">Incedents Score: </span> 
+                                    {{ g.total['incedent_sum'] }}
+                                </button>
+    
+                                <div class="accordion-panel">
+                                    <table width="100%" align="left" class="list">
+                                        <tr align="left" height="32px">
+                                            <th>Description</th>
+                                            <th>Date</th>
+                                            <th>Weight</th>
+                                            <th></th>
+                                        </tr>
+                                        {% for project in g.performance['incedents'] %}
+                                        <tr align="left" height="32px">
+
+                                            <td>{{project['incedent_desc']}}</td>
+                                            <td>{{project['incedent_date']}}</td>
+                                            <td>{{project['magnitude']}}</td>
+                                            <td align="center">
+                                                <form action="/del_incedent" method="post">
+                                                        <input type="hidden" name="empID" value="{{g.emp['empID']}}">
+                                                        <input type="hidden" name="incedent_desc" value="{{project['incedent_desc']}}">
+                                                        <input type="submit" class="del-button submit" value="DEL">
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        <tr align="left" height="32px">
+                                            <form action="/add_incedent" method="post">
+                                                <input type="hidden" name="empID" value="{{g.emp['empID']}}">
+                                                <td><input type="text" name="incedent_desc" required></td>
+                                                <td><input type="date" name="incedent_date" required></td>
+                                                <td><input type="number" name="magnitude" required></td>
+                                                <td align="center"><input type="submit" class="add-button submit" value="+"></td>
+                                            </form>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- 
+                            <div class="perf-field">
+                                <span class="perf-label">PTO Hours Used (This Year): </span> 
+                                $[employee.ptoused]
+                            </div>
+                            <div class="perf-field">
+                                <span class="perf-label">PTO Hours Available (This Year): </span> 
+                                $[employee.ptoavail]
+                            </div> 
+                            -->
+                            <div class="perf-field">
+                                <button class="accordion">
+                                    <span class="perf-label">Punctuality Score: </span> 
+                                    {{ g.total['punctuality_sum'] }}
+                                </button>
+    
+                                <div class="accordion-panel">
+                                    <table width="100%" class="list">
+                                        <tr align="left" height="32px">
+                                            <th>Date</th>
+                                            <th>Type</th>
+                                            <th>Weight</th>
+                                            <th></th>
+                                        </tr>
+                                        {% for project in g.performance['punctuality'] %}
+                                        <tr align="left" height="32px">
+                                            <td>{{project['incedent_date']}}</td>
+                                            <td>{{project['incedent_type']}}</td>
+                                            <td>{{project['magnitude']}}</td>
+                                            <td align="center">
+                                                <form action="/del_punctuality" method="post">
+                                                    <input type="hidden" name="empID" value="{{g.emp['empID']}}">
+                                                    <input type="hidden" name="incedent_date" value="{{project['incedent_date']}}">
+                                                    <input type="submit" class="del-button submit" value="DEL">
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        <tr align="left" height="32px">
+                                            <form action="/add_punctuality" method="post">
+                                                <input type="hidden" name="empID" value="{{g.emp['empID']}}">
+                                                <td><input type="date" name="incedent_date" required></td>
+                                                <td>                                                    
+                                                    <select name="incedent_type" required>
+                                                        <option value="late">Late</option>
+                                                        <option value="excused">Excused Absence</option>
+                                                        <option value="unexcused">Unexcused Absenced</option>
+                                                    </select>
+                                                </td>
+                                                <td><input type="number" name="magnitude" required></td>
+                                                <td align="center"><input type="submit" class="add-button submit" value="+"></td>
+                                            </form>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- 
+                            <div class="perf-field">
+                                <span class="perf-label">Tardies: </span> 
+                                $[employee.tardies]
+                            </div>
+                            <div class="perf-field">
+                                <span class="perf-label">No Call No Shows: </span> 
+                                $[employee.ncns]
+                            </div> 
+                            -->
+                             <div class="perf-field">
+                                <button class="accordion">
+                                    <span class="perf-label">Comments Score: </span> 
+                                    {{ g.total['comment_sum'] }}
+                                </button>
+    
+                                <div class="accordion-panel">
+                                    <table width="100%" align="left" class="list">
+                                        <tr align="left" height="32px">
+                                            <th>Comment</th>
+                                            <th>Weight</th>
+                                            <th></th>
+                                        </tr>
+                                        {% for project in g.performance['comments'] %}
+                                        <tr align="left" height="32px">
+                                            <td>{{project['comments']}}</td>
+                                            <td>{{project['magnitude']}}</td>
+                                            <td align="center">
+                                                <form action="/del_comments" method="post">
+                                                    <input type="hidden" name="empID" value="{{g.emp['empID']}}">
+                                                    <input type="hidden" name="comments" value="{{project['comments']}}">
+                                                    <input type="submit" class="del-button submit" value="DEL">
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        <tr align="left" height="32px">
+                                            <form action="/add_comments" method="post">
+                                                <input type="hidden" name="empID" value="{{g.emp['empID']}}">
+                                                <td><input type="text" name="comments" required></td>
+                                                <td><input type="number" name="magnitude" required></td>
+                                                <td align="center"><input type="submit" class="add-button submit" value="+"></td>
+                                            </form>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- <div class="perf-field">
+                                <span class="perf-label">Kudos: </span> 
+                                $[employee.kudos]
+                            </div> -->
+                        </div>
+					</div>
+					</td>
+					</tr></table>
+				</div>
+				
+				<div id="TE" class="tabcontent">
+					<h3>Top Employees</h3>
+					<center>
+						<table style="width:100%;"><tr><td>
+						<center><b>Most Projects Completed:</b></center>
+							<div style="width:100%;text-align:justify;">
+							<ol style="margin-left:50px;">
+
+							{% for employee in g.top['projects'] %}
+								<li>{{ employee['fname'] }} {{ employee['lname'] }}</li>
+							{% endfor %}
+
+							</ol>
+						</div>
+						</td><td>
+						<center><b>Most Kudos:</b></center> 
+							<div style="width:100%;text-align:justify;">
+							<ol style="margin-left:50px;">
+							{% for employee in g.top['comments'] %}
+								<li>{{ employee['fname'] }} {{ employee['lname'] }}</li>
+							{% endfor %}
+							</ol>
+						</div>
+						</td></tr>
+						</table>
+					</center>
+				</div>
+		
+		</div>
+		</center>
+	</body>
+<style>
+
+/* .info {
+} */
+.info .info-field {
+	width:100%;
+}
+
+.info .info-field .info-label {
+	display:inline-block;
+	width:35%;
+	text-align:left;
+	padding-left:20px;
+	padding-bottom:10px;
+}
+
+.button-box {
+	text-align:center;
+}
+.button-box-in {
+	margin-left:80%;
+	width:20%;
+}
+button {
+	width:45%;
+	padding:10px;
+	font-weight:900;
+	border-radius:20px;
+}
+button#login {
+	background-color:#fff;
+	color:#000;
+	border:transparent;
+	transition:background 2s;
+}
+
+button#login:hover {
+	background-color:hsl(var(--signupback), 85%);
+}
+button {
+	width:45%;
+	padding:10px;
+	font-weight:900;
+	border-radius:20px;
+}
+
+button#logout {
+	background-color:#fff;
+	color:#000;
+	border:transparent;
+	transition:background 2s;
+}
+
+/* .perf {
+} */
+.perf .perf-field {
+	width:100%;
+}
+
+.perf .perf-field .perf-label {
+	display:inline-block;
+	width:60%;
+	text-align:left;
+	padding-left:20px;
+	padding-bottom:10px;
+}
+
+#wrapper {
+	width:65%;
+	position:relative;
+	display: flex;
+	flex-wrap: wrap;
+
+}
+
+* {
+	box-sizing: border-box;
+}
+
+.tab {
+	float: left;
+	width: 30%;
+}
+
+.tab button {
+	display: block;
+	background-color: inherit;
+	color: black;
+	padding: 22px 16px;
+	width: 100%;
+	border: none;
+	outline: none;
+	text-align: left;
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+.tab button:hover {
+	background-color: #ddd;
+}
+
+.tab button.active {
+	background-color: #ccc;
+}
+
+
+
+</style>
+<script>
+	function openTab(evt, tabName) {
+		var i, tabcontent, tablinks;
+		tabcontent = document.getElementsByClassName("tabcontent");
+		for (i = 0; i < tabcontent.length; i++) {
+			tabcontent[i].style.display = "none";
+		}
+		tablinks = document.getElementsByClassName("tablinks");
+		for (i = 0; i < tabcontent.length; i++) {
+			tablinks[i].classList.remove("active");
+	}
+	document.getElementById(tabName).style.display = "block";
+	evt.currentTarget.classList.add("active");
+	}
+
+	const tabs = document.getElementsByClassName('tablinks');
+    const acc = document.getElementsByClassName('accordion');
+
+	const queryString = window.location.search;
+	const urlParams = new URLSearchParams(queryString);
+	const tab = urlParams.get('tab');
+	const tab2 = urlParams.get('tab2');
+
+	switch(tab) {
+		case 'EI':
+			tabs[1].click();
+			break;
+		case 'EP':
+			tabs[2].click();
+			break;
+		case 'TE':
+			tabs[3].click();
+			break;
+		default:
+			document.getElementById("DefaultOpen").click();
+	}
+
+	var i;
+	for (i = 0; i < acc.length; i++) {
+	acc[i].addEventListener("click", function() {
+		this.classList.toggle("active");
+		var panel = this.nextElementSibling;
+		if (panel.style.maxHeight) {
+		panel.style.maxHeight = null;
+		} else {
+		panel.style.maxHeight = panel.scrollHeight + "px";
+		}
+	});
+	}
+
+    switch(tab2) {
+        case 'proj':
+            acc[0].click();
+            break;
+        case 'inc':
+            acc[1].click();
+            break;
+        case 'punc':
+            acc[2].click();
+            break;
+        case 'comm':
+            acc[3].click();
+    }
+
+</script>
+</html>
+
+</html>

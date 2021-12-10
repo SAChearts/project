@@ -1,17 +1,23 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Log In{% endblock %}</h1>
+  <h2>{% block title %}Log In{% endblock %}</h2>
 {% endblock %}
 
 {% block content %}
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Log In">
+  <form method="post" class="login-form">
+    <label for="username" hidden>Username</label>
+    <input name="username" id="username" placeholder="Username" required>
+	<br>
+    <label for="password" hidden>Password</label>
+    <input type="password" name="password" id="password" placeholder="Password" required>
+	<br>
+    <input type="submit" class="submit" value="Log In">
   </form>
+  <script>
+	  const loginLink = document.getElementById('login-link');
+	  loginLink.style.display = 'none';
+  </script>
 {% endblock %}
 <!--<!DOCTYPE html>
 <html>
